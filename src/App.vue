@@ -191,4 +191,10 @@ a.router-link {
   -webkit-filter: invert();
   filter: invert();
 }
+
+.overshadow {
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.25);
+  z-index: 16;
+  position: relative;
+}
 </style>

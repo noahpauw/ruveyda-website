@@ -41,7 +41,7 @@
     <FillerImage />
 
     <div class="flex">
-        <div class="full-width">
+        <div class="full-width overshadow">
             <div class="container">
                 <img src="../../assets/lashroom_logo_full.png" class="icon-smaller">
 
@@ -91,7 +91,7 @@
             </div>
         </div>
 
-        <div class="container container-gray">
+        <div class="container container-gray ignore-padding">
             <PictureGallery />
         </div>
     </div>
@@ -111,6 +111,9 @@ export default {
         return {
             breadcrumbs: []
         }
+    },
+    created() {
+        document.title = "Lash Room Deventer | Home";
     }
 }
 </script>
