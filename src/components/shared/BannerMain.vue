@@ -16,7 +16,7 @@
             </router-link>
         </div>
 
-        <div :class="scrollPosition < 64 ? 'contact-bar' : 'contact-bar show-contact-bar'">
+        <div :class="'contact-bar show-contact-bar'">
             <small class="flex centered">
                 <div class="contact-info"><img src="../../assets/svg/phone.svg" class="svg"> 0641535168</div>
                 <div class="contact-info">|</div>
