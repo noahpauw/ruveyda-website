@@ -23,7 +23,7 @@
         <p>Morbi sed libero a massa venenatis porttitor quis in dui. Morbi maximus efficitur semper. Donec efficitur felis
             semper libero rutrum, ac dictum ipsum dignissim. Fusce a dui dolor. Proin ullamcorper non lacus sit amet dictum.
             Suspendisse dictum id odio at molestie. Aenean vel sodales mi. Cras lectus lacus, sagittis ut lectus vel,
-            pretium scelerisque est.</p>
+            pretium scelerisque est.</p> 
     </div>
 </template>
 
