@@ -91,7 +91,7 @@
             </div>
         </div>
 
-        <div class="container container-gray ignore-padding">
+        <div class="container container-ferns ignore-padding full-width">
             <PictureGallery />
         </div>
     </div>
@@ -135,13 +135,9 @@ h2 {
 
 .place {
     width: 100%;
-    height: 400px;
+    height: 270px;
     background-image: url("../../assets/salon-3.jpg");
     background-size: cover;
-}
-
-.no-top-margin {
-    margin-top: 0;
 }
 
 .icon-smaller {
@@ -161,14 +157,6 @@ h2 {
     width: 100%;
 }
 
-.ignore-padding {
-    padding: 0;
-}
-
-.padding-6em {
-    padding: 4em;
-}
-
 .container-gray {
     background-color: var(--color-tint3);
 }
@@ -180,6 +168,12 @@ h2 {
 
 .container-instagram {
     background-image: url("../../assets/instagram_colors.png");
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.container-ferns {
+    background-image: url("../../assets/varen.jpg");
     background-size: cover;
     background-attachment: fixed;
 }
@@ -201,5 +195,9 @@ li {
 .closed {
     font-weight: bold;
     color: var(--color-accent3);
+}
+
+.ignore-padding {
+    padding: 0;
 }
 </style>

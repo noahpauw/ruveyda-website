@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <div id="banner" :class="scrollPosition < 64 ? 'flex centered banner' : 'flex centered banner banner-small-padding'">
+        <div id="banner"
+            :class="scrollPosition < 64 ? 'flex centered banner' : 'flex centered banner banner-small-padding'">
             <router-link to="/">
                 <div class="logo-class">
                     <div>
@@ -27,7 +28,7 @@
             <div class="shine shine-offset shine-subtle">
                 <div class="flex centered">
                     <div v-for="page in pages" :key="page.title">
-                        <router-link :to="page.route">
+                        <router-link :to="page.route" class="nav-button">
                             <div class="button">
                                 {{ page.title }}
                             </div>
@@ -55,11 +56,11 @@ export default {
                     title: "Over mij",
                     route: "/aboutme"
                 }, {
-                    title: "Galerij",
-                    route: "/galerij"
-                }, {
                     title: "Afspraak maken",
                     route: "/afspraak"
+                }, {
+                    title: "Mijn afspraak",
+                    route: "/mijn-afspraak"
                 }, {
                     title: "Contact",
                     route: "/contact"
@@ -195,6 +196,10 @@ small {
 
 .shine-offset {
     background-position: 50% 5%;
+}
+
+.nav-button {
+    text-decoration: none;
 }
 
 @keyframes fade-in {

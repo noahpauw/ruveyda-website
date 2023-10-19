@@ -154,6 +154,19 @@ p {
   cursor: pointer;
 }
 
+.no-top-margin {
+    margin-top: 0;
+}
+
+.ignore-padding {
+    padding: 0;
+}
+
+.padding-6em {
+    padding: 4em;
+}
+
+
 a.router-link {
   color: white !important;
 }
@@ -193,8 +206,25 @@ a.router-link {
 }
 
 .overshadow {
-  box-shadow: 0 0 24px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
   z-index: 16;
   position: relative;
+  border-right: 8px solid var(--color-tint5);
+}
+
+.container {
+  animation: fade-content;
+  animation-duration: var(--transition-1000ms);
+  animation-fill-mode: forwards;
+}
+
+@keyframes fade-content {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 </style>

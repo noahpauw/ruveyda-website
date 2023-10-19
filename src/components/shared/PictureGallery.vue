@@ -33,11 +33,12 @@ export default {
     display: flex;
     flex-wrap: wrap;
     flex-shrink: 0;
-    gap: 4px;
+    gap: 8px;
     position: relative;
     /* filter: saturate(60%); */
     overflow: hidden;
     box-shadow: 2px 4px 40px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
 .picture {
@@ -48,6 +49,6 @@ export default {
 }
 
 .pic-third {
-    width: 49.7%;
+    width: calc(50% - 4px);
 }
 </style>

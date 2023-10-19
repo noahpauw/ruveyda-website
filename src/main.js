@@ -10,6 +10,9 @@ const app = createApp({
                 {
                     title: "Home",
                     route: "/"
+                }, {
+                    title: "Over mij",
+                    route: "/aboutme"
                 }
             ]
         };
