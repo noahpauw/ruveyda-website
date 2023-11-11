@@ -56,11 +56,51 @@ export default {
     components: {
         Breadcrumbs
     },
+    methods: {
+        convertDateToString(date) {
+            console.log(date);
+            return `${date.getDate()} ${date.getMonth()} ${date.getFullYear()} om ${date.getHours()}:${date.getMinutes()}`;
+        }, convertMonth(month) {
+            switch (month) {
+                case 0:
+                    return "januari";
+                case 1:
+                    return "februari";
+                case 2:
+                    return "maart";
+                case 3:
+                    return "april";
+                case 4:
+                    return "mei";
+                case 5:
+                    return "juni";
+                case 6:
+                    return "juli";
+                case 7:
+                    return "augustus";
+                case 8:
+                    return "september";
+                case 9:
+                    return "oktober";
+                case 10:
+                    return "november";
+                default:
+                    return "december";
+            }
+        }
+    },
     mounted() {
+        let d = this.$cookies.get("appDate");
+        console.log(d);
+
+        console.log("--------------------------------------");
+        const d2 = new Date(parseInt(d) * 1000);
+        console.log(d2);
+
         this.firstname = this.$cookies.get("appFirstname");
         this.lastname = this.$cookies.get("appLastname");
         this.email = this.$cookies.get("appEmail");
-        this.date = this.$cookies.get("appDate");
+        this.date = `${d2.getDate()} ${this.convertMonth(d2.getMonth())} ${d2.getFullYear()} om ${d2.getHours()}:${d2.getMinutes() < 10 ? "0" + d2.getMinutes() : d2.getMinutes()}`;
         this.phone = this.$cookies.get("appPhone");
         this.comments = this.$cookies.get("appComments");
         document.title = "Lash Room Deventer | Mijn afspraak";

@@ -83,70 +83,70 @@
                                     <div v-for="(  slot, index  ) in dates[chosenDate].slots" :key="slot"
                                         :class="[chosenTime === index ? 'date-available date-chosen' : 'date-available']"
                                         @click="chosenTime = index">
-                                        {{ slot.hour }} : {{ slot.minutes < 10 ? slot.minutes + '0' : slot.minutes }}
-                                    </div>
-                                    <div v-if="dates[chosenDate].slots.length === 0">
-                                        <p>Sorry. Voor deze dag zijn geen plekken beschikbaar.</p>
+                                        {{ slot.hour }} : {{ slot.minutes < 10 ? slot.minutes + '0' : slot.minutes }} </div>
+                                            <div v-if="dates[chosenDate].slots.length === 0">
+                                                <p>Sorry. Voor deze dag zijn geen plekken beschikbaar.</p>
+                                            </div>
                                     </div>
                                 </div>
+                                <div v-else class="padding-box">
+                                    <h3>Kies eerst een behandeling</h3>
+                                    <p>De beschikbare tijden zijn afhankelijk van de behandeling die je kiest.</p>
+                                </div>
                             </div>
-                            <div v-else class="padding-box">
-                                <h3>Kies eerst een behandeling</h3>
-                                <p>De beschikbare tijden zijn afhankelijk van de behandeling die je kiest.</p>
+                            <h3>Opmerkingen</h3>
+                            <textarea class="textarea" :value="comments"
+                                @input="val => comments = val.target.value"></textarea>
+                            <h3>Algemene voorwaarden<span class="mandatory">*</span></h3>
+                            <label>
+                                <input type="checkbox" name="acceptTerms" @click="val => acceptTerms = val.target.checked"
+                                    :value="acceptTerms">
+                                <span>Ik ga akkoord met de <router-link to="/algemene-voorwaarden">Algemene
+                                        Voorwaaden</router-link></span>
+                            </label>
+                            <div class="filler-1em"></div>
+                            <div v-for="error in errors" :key="error">
+                                <p v-if="error.display" class="error">{{ error.message }}</p>
                             </div>
+                            <div class="flex d-mobile-block">
+                                <div class="site-button-square" @click="planAppointment()">AFSPRAAK INPLANNEN</div>
+                            </div>
+                            <p>
+                                <small>*) Velden met een sterretje zijn verplicht</small>
+                            </p>
                         </div>
-                        <h3>Opmerkingen</h3>
-                        <textarea class="textarea" :value="comments" @input="val => comments = val.target.value"></textarea>
-                        <h3>Algemene voorwaarden<span class="mandatory">*</span></h3>
-                        <label>
-                            <input type="checkbox" name="acceptTerms" @click="val => acceptTerms = val.target.checked"
-                                :value="acceptTerms">
-                            <span>Ik ga akkoord met de <router-link to="/algemene-voorwaarden">Algemene
-                                    Voorwaaden</router-link></span>
-                        </label>
-                        <div class="filler-1em"></div>
-                        <div v-for="error in errors" :key="error">
-                            <p v-if="error.display" class="error">{{ error.message }}</p>
-                        </div>
-                        <div class="flex d-mobile-block">
-                            <div class="site-button-square" @click="planAppointment()">AFSPRAAK INPLANNEN</div>
-                        </div>
-                        <p>
-                            <small>*) Velden met een sterretje zijn verplicht</small>
-                        </p>
                     </div>
-                </div>
 
-                <div class="full-width marble hide-mobile" id="marble">
-                    <div class="container full-width hours-container transparent-background">
-                        <img src="../../assets/lashroom_logo_full.png" class="icon-smaller">
-                        <h2>Openingstijden</h2>
-                        <div class="flex">
-                            <ul>
-                                <li>Maandag</li>
-                                <li>Dinsdag</li>
-                                <li>Woensdag</li>
-                                <li>Donderdag</li>
-                                <li>Vrijdag</li>
-                                <li>Zaterdag</li>
-                                <li>Zondag</li>
-                            </ul>
+                    <div class="full-width marble hide-mobile" id="marble">
+                        <div class="container full-width hours-container transparent-background">
+                            <img src="../../assets/lashroom_logo_full.png" class="icon-smaller">
+                            <h2>Openingstijden</h2>
+                            <div class="flex">
+                                <ul>
+                                    <li>Maandag</li>
+                                    <li>Dinsdag</li>
+                                    <li>Woensdag</li>
+                                    <li>Donderdag</li>
+                                    <li>Vrijdag</li>
+                                    <li>Zaterdag</li>
+                                    <li>Zondag</li>
+                                </ul>
 
-                            <ul>
-                                <li class="closed">Gesloten</li>
-                                <li>11:30 - 19:00</li>
-                                <li>10:00 - 17:00</li>
-                                <li>10:00 - 17:00</li>
-                                <li>10:00 - 17:00</li>
-                                <li class="closed">Gesloten</li>
-                                <li class="closed">Gesloten</li>
-                            </ul>
+                                <ul>
+                                    <li class="closed">Gesloten</li>
+                                    <li>11:30 - 19:00</li>
+                                    <li>10:00 - 17:00</li>
+                                    <li>10:00 - 17:00</li>
+                                    <li>10:00 - 17:00</li>
+                                    <li class="closed">Gesloten</li>
+                                    <li class="closed">Gesloten</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 <script>
@@ -289,7 +289,7 @@ export default {
                 return;
 
             this.planning = true;
-            setInterval(() => {
+            setTimeout(() => {
                 // Set a cookie
                 const COOKIE_CONSENT = localStorage.getItem("cookiesUserConsent");
 
@@ -304,7 +304,20 @@ export default {
 
                     const appointmentDate = `${this.dateShow(this.dates[this.chosenDate].appointmentDate)} om ${this.dates[this.chosenDate].slots[this.chosenTime]}`;
 
-                    this.$cookies.set("appDate", appointmentDate, COOKIE_LIFETIME);
+                    console.log(this.dates[this.chosenDate].appointmentDate);
+                    console.log(this.dates[this.chosenDate].slots[this.chosenTime]);
+
+                    // Create a UNIX timestamp based on date
+                    const appDate = this.dates[this.chosenDate].appointmentDate;
+                    const appTime = this.dates[this.chosenDate].slots[this.chosenTime];
+                    const SECONDS = 0;
+                    const newDate = new Date(appDate.getFullYear(), appDate.getMonth(), appDate.getDate(), appTime.hour, appTime.minutes, SECONDS);
+
+                    console.log(newDate);
+
+                    const dateUnix = Math.floor(newDate.getTime() / 1000);
+
+                    this.$cookies.set("appDate", dateUnix, COOKIE_LIFETIME);
                 }
 
                 if (this.planning)
