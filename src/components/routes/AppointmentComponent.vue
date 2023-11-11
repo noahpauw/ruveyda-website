@@ -5,7 +5,7 @@
             <router-link to="/">
                 <p class="show-mobile back-button">Terug</p>
             </router-link>
-            
+
             <h1 class="no-top-margin">Afspraak maken</h1>
             <p>Maak gemakkelijk een afspraak met het formulier hieronder.</p>
 
@@ -81,9 +81,9 @@
                                 <div class="filler-1em"></div>
                                 <div class="date-box" id="dateBox">
                                     <div v-for="(  slot, index  ) in dates[chosenDate].slots" :key="slot"
-                                        :class="[chosenTime === index ? 'date-available date-chosen' : 'date-available', calculateTimeSlot(slot) ? 'hide-time' : '']"
+                                        :class="[chosenTime === index ? 'date-available date-chosen' : 'date-available']"
                                         @click="chosenTime = index">
-                                        {{ slot.toString().substring(0, 2) }} : {{ slot.toString().substring(2, 4) }}
+                                        {{ slot.hour }} : {{ slot.minutes < 10 ? slot.minutes + '0' : slot.minutes }}
                                     </div>
                                     <div v-if="dates[chosenDate].slots.length === 0">
                                         <p>Sorry. Voor deze dag zijn geen plekken beschikbaar.</p>
@@ -184,17 +184,10 @@ export default {
 
                 let slots = this.getDaySlots(date.getDay());
 
-                let finalSlots = [];
-                for (var i = 0; i < slots.length; i++) {
-                    let ir = Math.round(Math.random());
-                    // if (ir === 1)
-                    finalSlots.push(slots[i]);
-                }
-
                 dates.push({
                     appointmentDate: date,
                     appointmentAvailable: true,
-                    slots: finalSlots
+                    slots: slots
                 });
             }
             return dates;
@@ -229,75 +222,40 @@ export default {
             dateBox.style.animationName = "date-animation";
             dateBox.style.animationDuration = "1000ms";
         }, getDaySlots(dayOfWeek) {
-            switch (dayOfWeek) {
-                case 2:
-                    return [
-                        1130,
-                        1145,
-                        1200,
-                        1215,
-                        1230,
-                        1245,
-                        1300,
-                        1315,
-                        1330,
-                        1345,
-                        1400,
-                        1415,
-                        1430,
-                        1445,
-                        1500,
-                        1515,
-                        1530,
-                        1545,
-                        1600,
-                        1615,
-                        1630,
-                        1645,
-                        1700,
-                        1715,
-                        1730,
-                        1745,
-                        1800,
-                        1815,
-                        1830,
-                        1845,
-                        1900
-                    ];
-                case 3: case 4: case 5:
-                    return [
-                        1000,
-                        1015,
-                        1030,
-                        1045,
-                        1100,
-                        1115,
-                        1130,
-                        1145,
-                        1200,
-                        1215,
-                        1230,
-                        1245,
-                        1300,
-                        1315,
-                        1330,
-                        1345,
-                        1400,
-                        1415,
-                        1430,
-                        1445,
-                        1500,
-                        1515,
-                        1530,
-                        1545,
-                        1600,
-                        1615,
-                        1630,
-                        1645,
-                        1700
-                    ];
-                default:
-                    return [];
+            // Use opening and closing hours to dynamically create hour slots
+            const workingHours = this.getAvailableTimeSlots(dayOfWeek);
+            let currentHour = workingHours.startingHour;
+            const closingHour = workingHours.closingHour;
+
+            let slots = [];
+            let minutes = 0;
+            while (currentHour < closingHour) {
+                slots.push({
+                    hour: currentHour,
+                    minutes: minutes
+                });
+                minutes += 15;
+                if (minutes > 45) {
+                    minutes = 0;
+                    currentHour++;
+                }
+            }
+            return slots;
+        }, getAvailableTimeSlots(dayOfWeek) {
+            if (dayOfWeek === 2) {
+                return {
+                    startingHour: 11,
+                    closingHour: 19
+                }
+            } else if (dayOfWeek === 3 || dayOfWeek === 4 || dayOfWeek === 5) {
+                return {
+                    startingHour: 10,
+                    closingHour: 17
+                }
+            }
+            return {
+                startingHour: 0,
+                closingHour: 0
             }
         }, async planAppointment() {
             let canPlanAppointment = true;
@@ -370,22 +328,7 @@ export default {
             this.durations.set("Touch up binnen 1 jaar", 30);
             this.durations.set("PMU LIPBLUSH", 60);
             this.durations.set("Verwijderen wimper extensions", 30);
-        }, calculateTimeSlot(slot) {
-            const closingHour = 1900;
-            const slotConverted = this.durations.get(this.selected) / 15;
-
-            let slotTime = slot;
-            for (let i = 0; i < slotConverted; i++) {
-                slotTime += 15;
-                const m = slotTime % 1000;
-                if (m > 45)
-                    slotTime += 55;
-            }
-
-            console.log(slotTime);
-
-            return (slot + slotConverted > closingHour);
-        }
+        },
     },
     created() {
         document.addEventListener("scroll", this.updateParallax);
