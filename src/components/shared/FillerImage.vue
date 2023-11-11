@@ -1,6 +1,9 @@
 <template>
     <div id="filler">
-        <div class="shine">
+        <div class="shine position-relative">
+            <video class="video-bg hide-mobile" muted autoplay loop id="videoMakeup">
+                <source src="../../assets/videos/vid_makeup3.mp4">
+            </video>
             <div class="hover-darker"></div>
             <span class="site-button center">
                 <router-link to="/afspraak" class="link">
@@ -13,7 +16,26 @@
 
 <script>
 export default {
-    name: "FillerImage"
+    name: "FillerImage",
+    created() {
+        document.addEventListener("scroll", this.updateParallax);
+    }, methods: {
+        updateParallax() {
+            const el = document.getElementById("filler");
+            const elVideo = document.getElementById("videoMakeup");
+            if (!el)
+                return;
+
+            const rect = el.getBoundingClientRect();
+            const offset = rect.y / 32;
+
+            el.style.backgroundPosition = `50% ${50 + offset}%`;
+            elVideo.style.top = `${-50 - offset * 4}%`;
+            return;
+        }
+    }, mounted() {
+        this.updateParallax();
+    }
 }
 </script>
 
@@ -30,12 +52,25 @@ export default {
 }
 
 .hover-darker {
-    transition-duration: var(--transition-300ms);
-    opacity: 25%;
-    width: 1920px;
+    transition-duration: var(--transition-600ms);
+    opacity: 0%;
+    width: 100%;
     height: 400px;
     background-color: black;
     position: absolute;
+    max-width: 1920px;
+}
+
+.position-relative {
+    position: relative;
+    overflow: hidden;
+}
+
+.video-bg {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: -50%;
 }
 
 .shine:hover>.hover-darker {
@@ -55,7 +90,7 @@ a {
     color: var(--color-tint5);
 }
 
-.site-button:hover > .link {
+.site-button:hover>.link {
     color: var(--color-dark-tint0);
 }
 </style>

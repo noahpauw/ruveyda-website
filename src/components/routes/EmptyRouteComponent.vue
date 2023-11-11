@@ -7,7 +7,10 @@
 
 <script>
 export default {
-    name: "empty-route"
+    name: "empty-route",
+    created() {
+        document.title = "Lash Room Deventer | 404";
+    }
 }
 </script>
 

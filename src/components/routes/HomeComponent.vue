@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container mobile-padding">
         <nav>
             <small>
                 <span v-for="breadcrumb in breadcrumbs" :key="breadcrumb.title">
@@ -9,55 +9,46 @@
             </small>
         </nav>
         <div class="flex">
-            <div>
+            <div class="full-width">
                 <h1 class="no-top-margin">Welkom</h1>
-                <p>Welkom op de website van Lash Room Deventer! Mijn naam is Rüveyda en ik ben in 2022 begonnen met Lash
-                    Room
-                    Deventer om mensen te voorzien van prachtige wimpers!</p>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lacinia at mauris eu dapibus.
-                    Suspendisse ut
-                    feugiat diam, quis euismod purus. Nulla consequat mattis turpis vel bibendum. Aenean in nisl nisi. Nam
-                    diam
-                    purus, imperdiet non semper in, euismod a ante. Sed auctor leo vitae massa pharetra, a auctor metus
-                    viverra.
-                    Donec non dui eget lacus hendrerit elementum. Cras non nunc id sapien tincidunt blandit eget a ante.
-                    Aenean
-                    pretium orci sit amet enim pretium dignissim. Cras convallis arcu in massa sollicitudin, ut fringilla
-                    augue
-                    bibendum.
+                <p>Welkom op de website van Lash Room Deventer! Mijn naam is Rüveyda en in 2022 ben ik met Lash Room
+                    Deventer begonnen om mensen te voorzien van prachtige wimpers.
                 </p>
                 <h2>Direct een afspraak maken?</h2>
                 <p>
-                <nav>Dat kan <router-link to="/afspraak">hier</router-link>!</nav>
+                <nav>Dat kan <router-link to="/afspraak">hier</router-link>! Voor het inplannen van een afspraak gelden onze
+                    <router-link to="/algemene-voorwaarden">Algemene Voorwaarden</router-link>.
+                </nav>
                 </p>
             </div>
             <div>
-                <img src="../../assets/vaugier.png" class="portrait">
+                <img src="../../assets/vaugier.png" class="portrait hide-mobile">
             </div>
         </div>
     </div>
 
     <FillerImage />
 
-    <div class="flex">
+    <div class="full-width filler-3em hide-mobile"></div>
+
+    <div class="flex d-mobile-block">
         <div class="full-width overshadow">
-            <div class="container">
-                <img src="../../assets/lashroom_logo_full.png" class="icon-smaller">
+            <div class="container container-stripes mobile-padding">
+                <img src="../../assets/lashroom_logo_full.png" class="icon-smaller hide-mobile">
 
                 <h2>Beauty, cosmetics & personal care</h2>
 
                 <ul>
-                    <li>🗸 One By One lashes | Russian Volume lashes</li>
-                    <li>🗸 PMU brows & lips</li>
-                    <li>🗸 Lashlift | Browlift</li>
+                    <li>- One By One lashes | Russian Volume lashes</li>
+                    <li>- PMU brows & lips</li>
+                    <li>- Lashlift | Browlift</li>
                 </ul>
             </div>
 
             <div class="container container-dark-gray ignore-padding">
-                <div class="padding-6em">
+                <div class="padding-6em mobile-padding">
                     <h2>My place</h2>
-                    <p>De salon in Deventer, Overijssel.</p>
+                    <p class="hide-mobile">De salon in Deventer, Overijssel.</p>
                 </div>
 
                 <div class="place">
@@ -65,9 +56,9 @@
                 </div>
             </div>
 
-            <div class="container">
+            <div class="container mobile-padding">
                 <h2>Openingstijden</h2>
-                <div class="flex">
+                <div class="flex mobile-center">
                     <ul>
                         <li>Maandag</li>
                         <li>Dinsdag</li>
@@ -78,7 +69,7 @@
                         <li>Zondag</li>
                     </ul>
 
-                    <ul>
+                    <ul class="text-align-right-mobile">
                         <li class="closed">Gesloten</li>
                         <li>11:30 - 19:00</li>
                         <li>10:00 - 17:00</li>
@@ -91,10 +82,12 @@
             </div>
         </div>
 
-        <div class="container container-ferns ignore-padding full-width">
+        <div class="container container-ferns ignore-padding full-width hide-mobile">
             <PictureGallery />
         </div>
     </div>
+
+    <div class="full-width filler-3em hide-mobile"></div>
 </template>
 
 <script>
@@ -109,7 +102,11 @@ export default {
     },
     data() {
         return {
-            breadcrumbs: []
+            breadcrumbs: [],
+            welcomeHeader: localStorage.getItem("welcomeHeader"),
+            welcomeMessage: localStorage.getItem("welcomeMessage"),
+            afspraakHeader: localStorage.getItem("afpsraakHeader"),
+            afspraakContent: localStorage.getItem("afspraakContent")
         }
     },
     created() {
@@ -157,6 +154,11 @@ h2 {
     width: 100%;
 }
 
+.filler-3em {
+    height: 8px;
+    background-color: #fff;
+}
+
 .container-gray {
     background-color: var(--color-tint3);
 }
@@ -176,6 +178,10 @@ h2 {
     background-image: url("../../assets/varen.jpg");
     background-size: cover;
     background-attachment: fixed;
+}
+
+.container-stripes {
+    background-image: url("../../assets/stripes.png");
 }
 
 ul {
