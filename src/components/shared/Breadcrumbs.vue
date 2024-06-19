@@ -1,6 +1,6 @@
 <template>
     <small>
-        <div class="flex gap-2em">
+        <div class="flex gap-2em mb-16px">
             <div v-for="(breadcrumb, index) of breadcrumbs" :key="breadcrumb.title">
                 <router-link :to="breadcrumb.route">
                     <span>{{ breadcrumb.title }}</span>
@@ -18,4 +18,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.mb-16px {
+    margin-bottom: 16px;
+}
+</style>
