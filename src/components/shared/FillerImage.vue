@@ -1,15 +1,15 @@
 <template>
     <div id="filler">
         <div class="shine position-relative">
-            <video class="video-bg hide-mobile" muted autoplay loop id="videoMakeup">
-                <source src="../../assets/videos/vid_makeup3.mp4">
-            </video>
+            <!-- <video class="video-bg hide-mobile" muted autoplay loop id="videoMakeup" v-if="screenWidth >= 868">
+                <source src="../../assets/videos/vid_makeup3.mp4" class="hide-mobile">
+            </video> -->
             <div class="hover-darker"></div>
-            <span class="site-button center">
-                <router-link to="/afspraak" class="link">
-                    PLAN DIRECT EEN AFSPRAAK
-                </router-link>
-            </span>
+            <router-link to="/afspraak" class="link">
+                <span class="site-button center">
+                        PLAN DIRECT EEN AFSPRAAK
+                </span>
+            </router-link>
         </div>
     </div>
 </template>
@@ -19,6 +19,10 @@ export default {
     name: "FillerImage",
     created() {
         document.addEventListener("scroll", this.updateParallax);
+        window.addEventListener("resize", this.updateScreenSize);
+
+        this.updateParallax();
+        this.updateScreenSize();
     }, methods: {
         updateParallax() {
             const el = document.getElementById("filler");
@@ -27,14 +31,25 @@ export default {
                 return;
 
             const rect = el.getBoundingClientRect();
-            const offset = rect.y / 32;
+            const offset = rect.y / 64;
 
             el.style.backgroundPosition = `50% ${50 + offset}%`;
-            elVideo.style.top = `${-50 - offset * 4}%`;
+
+            if (!elVideo)
+                return;
+
+            if (this.screenWidth >= 868)
+                elVideo.style.top = `${-50 - offset * 4}%`;
             return;
+        }, updateScreenSize() {
+            this.screenWidth = window.innerWidth;
         }
     }, mounted() {
         this.updateParallax();
+    }, data() {
+        return {
+            screenWidth: 1920
+        }
     }
 }
 </script>
@@ -42,32 +57,29 @@ export default {
 <style scoped>
 #filler {
     width: 100%;
-    height: 400px;
+    height: 600px;
 
     background-image: url("../../assets/salon-2.jpg");
     /* background-attachment: fixed; */
     background-position: 50% 50%;
 
     box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+    position: relative;
 }
 
 .hover-darker {
     transition-duration: var(--transition-600ms);
     opacity: 0%;
     width: 100%;
-    height: 400px;
+    height: 100%;
     background-color: black;
     position: absolute;
     max-width: 1920px;
 }
 
-.position-relative {
-    position: relative;
-    overflow: hidden;
-}
-
 .video-bg {
     width: 100%;
+    min-width: 1440px;
     position: absolute;
     left: 0;
     top: -50%;

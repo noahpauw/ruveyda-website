@@ -1,13 +1,13 @@
 <template>
-    <div class="container">
+    <div class="cst-container backlight" style="letter-spacing: 0.28px">
         <div id="banner" class="flex centered banner hide-overflow">
-            <router-link to="/">
-                <div class="logo-class">
+            <router-link to="/" class="border-0">
+                <div class="logo-class border-0">
                     <div>
-                        <img src="../../assets/lashroom_logo.png" class="logo">
+                        <img src="../../assets/lashroom_logo.png" class="logo border-0">
                     </div>
                     <div>
-                        <img src="../../assets/deventer.png" class="sublogo">
+                        <img src="../../assets/deventer.png" class="sublogo border-0">
                     </div>
                 </div>
             </router-link>
@@ -24,11 +24,14 @@
         <div class="nav-bar">
             <div class="shine shine-offset shine-subtle">
                 <div class="flex centered hide-mobile">
-                    <img src="../../assets/tiny_logo.png"
-                        :class="scrollPosition < 240 ? 'tiny-logo hide-logo' : 'tiny-logo'">
+                    <router-link to="/" class="border-0">
+                        <img src="../../assets/tiny_logo.png"
+                            :class="scrollPosition < 240 ? 'tiny-logo hide-logo' : 'tiny-logo'">
+                    </router-link>
                     <div v-for="page in pages" :key="page.title">
-                        <router-link :to="page.route" class="nav-button">
+                        <router-link :to="page.route" class="nav-button border-0">
                             <div class="button">
+                                <i class="fa fa-home m-0" v-if="page.route === '/'"></i>
                                 {{ page.title }}
                             </div>
                             <div :class="currentUrl.path === page.route ? 'current-route display-route' : 'current-route'">
@@ -96,6 +99,14 @@ small {
     color: var(--color-dark-tint4);
 }
 
+a {
+    border: 0 !important;
+    border-color: transparent !important;
+}
+.backlight {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
 .nav-bar {
     background-color: var(--color-dark-tint1);
     text-align: center;
@@ -108,7 +119,7 @@ small {
     overflow: hidden;
 }
 
-.container {
+.cst-container {
     max-width: 1920px;
 }
 

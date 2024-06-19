@@ -1,17 +1,22 @@
 <template>
-    <div class="container shine shine-subtle">
-        <p>© Lash Room Deventer 2023</p>
+    <div class="cst-container shine shine-subtle">
+        <p>© Lash Room Deventer {{ currentYear }}</p>
     </div>
 </template>
 
 <script>
 export default {
-    name: "footer-bottom"
+    name: "footer-bottom",
+    data() {
+        return {
+            currentYear: new Date().getFullYear(),
+        }
+    }
 }
 </script>
 
 <style scoped>
-.container {
+.cst-container {
     background-color: var(--color-dark-tint0);
     color: var(--color-tint5);
     padding: 3em;

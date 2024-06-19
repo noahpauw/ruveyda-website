@@ -1,12 +1,16 @@
 <template>
-    <div class="container marble">
+    <div class="container marble mobile-padding">
+        <router-link to="/">
+            <p class="show-mobile back-button">Terug</p>
+        </router-link>
         <h1 v-if="name">Bedankt, {{ name }}!</h1>
         <h1 v-else>Bedankt!</h1>
-        <p>Je afspraak is succesvol bij ons aangemaakt! <span v-if="email">We hebben een bevestigingsmailtje naar {{ email }} verstuurd.</span></p>
+        <p>Je afspraak is succesvol bij ons aangemaakt! <span v-if="email">We hebben een bevestigingsmailtje naar {{ email
+        }} verstuurd.</span></p>
         <p>Ik zie je graag {{ date ? `op ${date} ` : "binnenkort" }} bij Lash Room Deventer! 😊</p>
         <p>Klik <router-link to="/">hier</router-link> om terug te gaan naar de homepagina.</p>
-        <div>
-            <img src="../../assets/lashroom_logo_full.png" class="logo-round">
+        <div class="full-width flex">
+            <img src="../../assets/lashroom_logo_full.png" class="logo-round mx-auto">
         </div>
     </div>
 </template>
@@ -23,7 +27,16 @@ export default {
     }, mounted() {
         this.name = this.$cookies.get("appFirstname");
         this.email = this.$cookies.get("appEmail");
-        this.date = this.$cookies.get("appDate");
+
+        const appDate = this.$cookies.get("appDate");
+        this.date = appDate ? this.convertDateToString(parseInt(appDate)) : "vandaag";
+
+        document.title = "Lash Room Deventer | Afspraak gepland"
+    }, methods: {
+        convertDateToString(date) {
+            let newDate = new Date(date);
+            return `${newDate.getDate()} ${newDate.getMonth()} ${newDate.getFullYear()}`;
+        }
     }
 }
 </script>
@@ -36,6 +49,10 @@ export default {
     background-color: var(--color-tint4);
     color: var(--color-dark-tint4);
     width: 100%;
+}
+
+.mx-auto {
+    margin: auto;
 }
 
 .container-gray {

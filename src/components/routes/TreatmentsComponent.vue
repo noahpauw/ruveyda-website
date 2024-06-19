@@ -1,53 +1,24 @@
 <template>
-    <div class="container padding-6em mobile-padding">
-        <Breadcrumbs :breadcrumbs="breadcrumbs" class="hide-mobile" />
-        <router-link to="/">
-            <p class="show-mobile back-button">Terug</p>
-        </router-link>
-
-        <h1 class="force-left-align">Behandelingen</h1>
-        <p class="force-left-align">Bij ons kunt u terecht voor verschillende behandelingen!</p>
-    </div>
-    <div class="container container-stripes flex mobile-padding">
-        <div class="full-width padding-4em no-mobile-padding">
-            <h2 class="force-left-align">BROW LAMINATION</h2>
-            <p class="force-left-align">
-                Fuller brows in one session 🧚🏻
-            </p>
-            <p class="force-left-align">
-                Brow lamination is een behandeling waarbij de natuurlijkewenkbrauwhaartjes in de juiste richting geplaats
-                worden.
-                Na de behandeling lijken de wenkbrauwen direct een stuk voller.
-            <ul>
-                <li>Het resultaat zal 4 tot 6 weken zichtbaar zijn</li>
-                <li>De behandeling is niet schadelijk voor de wenkbrauwen</li>
-            </ul>
-            </p>
+    <div class="cst-container bg-plus">
+        <div class="w-100 p-4 p-lg-5 position-relative">
+            <div class="p-0 p-lg-5">
+                <div class="p-0 p-lg-5 py-3 py-lg-5">
+                    <Breadcrumbs :breadcrumbs="breadcrumbs" />
+                    <h1 class="force-left-align display-1">Behandelingen</h1>
+                </div>
+            </div>
         </div>
 
-        <div class="img-holder hide-mobile">
-            <img src="../../assets/instagram/ombre.jpg">
-        </div>
-    </div>
-
-    <div class="container container-gray flex mobile-padding">
-        <div class="img-holder hide-mobile">
-            <img src="../../assets/instagram/ombre.jpg">
-        </div>
-        <div class="full-width padding-4em no-mobile-padding">
-            <h2 class="force-left-align">LASH VOLUME LIFT</h2>
-            <p class="force-left-align">
-                <b>Lash volume lifting is a form of magic!</b>
-            </p>
-            <p class="force-left-align">
-                Lash volume lift: Tijdens de behandeling worden de natuurlijke wimpers vanaf de wortel gelift.
-            <ul>
-                <li>Het resultaat zal 6 tot 8 weken zichtbaar blijven</li>
-                <li>De behandeling is niet schadelijk voor de natuurlijke wimpers</li>
-                <li>Tijdsduur behandeling: 45 minuten</li>
-            </ul>
-            </p>
-        </div>
+        <template v-for="treatment in treatments" :key="treatment">
+            <div :class="['w-100 px-4 px-lg-5 text-start position-relative py-0 border-bottom border-subtle', treatment.text, treatment.background]">
+                <div class="p-0 p-lg-5">
+                    <div class="p-0 p-lg-5 py-3 py-lg-5">
+                        <h2 class="mt-3">{{ treatment.title }}</h2>
+                        <div v-html="treatment.description"></div>
+                    </div>
+                </div>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -64,7 +35,21 @@ export default {
             }, {
                 title: "Behandelingen",
                 route: "/behandelingen"
-            }]
+            }],
+            treatments: [
+                {
+                    title: "One By One lashes",
+                    description: "<p>De One by One methode zorgt voor een elegante en natuurlijke look! Per natuurlijke wimperhaar wordt één enkele wimperextension geplaatst.</p><p>Deze behandelmethode is het meest geschikt voor mensen die veel wimpers van zichzelf hebben, maar meer lengte willen creëren of voor mensen die een natuurlijke en volle uitstraling willen.</p>",
+                    background: 'bg-dark',
+                    text: 'text-light',
+                },
+                {
+                    title: "Lashlift | Browlift",
+                    description: "<p>De One by One methode zorgt voor een elegante en natuurlijke look! Per natuurlijke wimperhaar wordt één enkele wimperextension geplaatst.</p><p>Deze behandelmethode is het meest geschikt voor mensen die veel wimpers van zichzelf hebben, maar meer lengte willen creëren of voor mensen die een natuurlijke en volle uitstraling willen.</p>",
+                    background: 'bg-light',
+                    text: 'text-dark',
+                }
+            ]
         }
     }, components: {
         Breadcrumbs
@@ -79,7 +64,7 @@ h1 {
     margin-top: 0;
 }
 
-.container {
+.cst-container {
     width: 100%;
     box-sizing: border-box;
     overflow: clip;

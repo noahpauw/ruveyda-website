@@ -1,158 +1,229 @@
 <template>
     <div>
-        <div class="container mobile-padding">
-            <Breadcrumbs :breadcrumbs="breadcrumbs" class="hide-mobile" />
-            <router-link to="/">
-                <p class="show-mobile back-button">Terug</p>
-            </router-link>
+        <div class="cst-container bg-diamonds">
+            <div class="p-4 p-lg-5">
+                <div class="p-0 p-lg-5">
+                    <div class="p-0 p-lg-5 py-3 py-lg-5">
+                        <Breadcrumbs :breadcrumbs="breadcrumbs" />
 
-            <h1 class="no-top-margin">Afspraak maken</h1>
-            <p>Maak gemakkelijk een afspraak met het formulier hieronder.</p>
+                        <h1 class="no-top-margin display-1 border-0">Afspraak maken</h1>
+                        <template v-if="canMakeAppointment">
+                            <div class="row">
+                                <div class="cst-container-appointment mx-auto mt-2 mt-md-5 p-3 p-lg-5 rounded-1 subtle-shadow border border-light">
+                                    <div class="p-1 p-md-2 p-xl-5">
+                                        <div class="form position-relative">
+                                            <img src="../../assets/lashroom_logo_full.png" class="lash-logo hide-mobile"
+                                                alt="Logo van Lash Room Deventer">
+                                            <!-- First name -->
+                                            <form method="post"
+                                                action="https://lashroomdeventer.nl/php/appointment_scripts/create_appointment.php">
+                                                <h4>Voornaam<span class="mandatory">*</span></h4>
+                                                <div class="full-width">
+                                                    <input :value="firstname" @input="val => firstname = val.target.value"
+                                                        placeholder="Voornaam" class="input" name="firstname" required>
+                                                </div>
 
-            <div class="full-width flex d-mobile-block">
-                <div
-                    :class="!planning ? 'container-appointment padding-6em mobile-padding' : 'container-appointment padding-6em semi-transparent mobile-padding'">
-                    <div class="form">
-                        <h3>Voornaam<span class="mandatory">*</span></h3>
-                        <div class="full-width">
-                            <input :value="firstname" @input="val => firstname = val.target.value" placeholder="Voornaam"
-                                class="input">
-                        </div>
-                        <h3>Achternaam<span class="mandatory">*</span></h3>
-                        <div class="full-width">
-                            <input :value="lastname" @input="val => lastname = val.target.value" placeholder="Achternaam"
-                                class="input">
-                        </div>
-                        <h3>E-mailadres<span class="mandatory">*</span></h3>
-                        <div class="full-width">
-                            <input type="email" :value="email" @input="val => email = val.target.value"
-                                placeholder="E-mailadres" class="input">
-                        </div>
-                        <h3>Telefoonnummer<span class="mandatory">*</span></h3>
-                        <div class="full-width">
-                            <input type="phone" :value="phone" @input="val => phone = val.target.value"
-                                placeholder="Telefoonnummer" class="input">
-                        </div>
-                        <h3>Behandeling<span class="mandatory">*</span></h3>
-                        <select v-model="selected">
-                            <option>Selecteer een behandeling...</option>
-                            <optgroup label="ONE BY ONE WIMPER EXTENSTIONS"></optgroup>
-                            <option>NIEUWE SET</option>
-                            <option>Opvullen 2 weken</option>
-                            <option>Opvullen 3 weken</option>
-                            <option>Opvullen 4 weken</option>
-                            <optgroup label="VOLUME WIMPER EXTENSIONS"></optgroup>
-                            <option>Opvullen 2 weken</option>
-                            <option>Opvullen 3 weken</option>
-                            <option>Opvullen 4 weken</option>
-                            <optgroup label="LASH LFITING"></optgroup>
-                            <option>Lash lift</option>
-                            <option>Lash lift + tint</option>
-                            <optgroup label="BROW LAMINATION"></optgroup>
-                            <option>Brow lamination</option>
-                            <option>Brow lamination + tint</option>
-                            <optgroup label="(OMBRÉ) POWDER BROWS"></optgroup>
-                            <option>(OMBRÉ) POWDER BROWS incl. nabehandeling</option>
-                            <option>Touch up binnen 6 maanden</option>
-                            <option>Touch up binnen 1 jaar</option>
-                            <optgroup label="LIPBLUSH PMU"></optgroup>
-                            <option>PMU LIPBLUSH</option>
-                            <option>Touch up binnen 6 maanden</option>
-                            <option>Touch up binnen 1 jaar</option>
-                            <optgroup label="VERWIJDEREN"></optgroup>
-                            <option>Verwijderen wimper extensions</option>
-                        </select>
-                        <h3>
-                            Datum & Tijd<span class="mandatory">*</span>
-                        </h3>
-                        <div class="full-width date-box-outline">
-                            <div v-if="selected !== 'Selecteer een behandeling...'">
-                                <div class="flex space full-width">
-                                    <img src="../../assets/svg/previous.svg"
-                                        :class="chosenDate > 0 ? 'icon-increment left-icon' : 'icon-increment disappear-date left-icon'"
-                                        @click="changeDate(-1);">
-                                    <div class="current-date fixed-width-300">{{ dateShow(dates[chosenDate].appointmentDate)
-                                    }}
+                                                <!-- Last name -->
+                                                <h4>Achternaam<span class="mandatory">*</span></h4>
+                                                <div class="full-width">
+                                                    <input :value="lastname" @input="val => lastname = val.target.value"
+                                                        placeholder="Achternaam" class="input" name="lastname" required>
+                                                </div>
+
+                                                <!-- Emailaddress -->
+                                                <h4>E-mailadres<span class="mandatory">*</span></h4>
+                                                <div class="full-width">
+                                                    <input type="email" :value="email"
+                                                        @input="val => email = val.target.value" placeholder="E-mailadres"
+                                                        class="input" name="email" required>
+                                                </div>
+
+                                                <!-- Phone number -->
+                                                <h4>Telefoonnummer<span class="mandatory">*</span></h4>
+                                                <div class="full-width">
+                                                    <input type="phone" :value="phone"
+                                                        @input="val => phone = val.target.value"
+                                                        placeholder="Telefoonnummer" class="input" name="phonenumber"
+                                                        required>
+                                                </div>
+
+                                                <!-- Types of appointments. Value is used to calculate available time slots -->
+                                                <h4>Behandeling<span class="mandatory">*</span></h4>
+                                                <select v-model="selected" @change="() => calculateTimeSlotAvailability()"
+                                                    name="appointment_type" required>
+                                                    <option>Selecteer een behandeling...</option>
+                                                    <optgroup label="ONE BY ONE WIMPER EXTENSTIONS"></optgroup>
+                                                    <option value="ONE BY ONE WIMPER EXTENSIONS - Nieuwe set">Nieuwe set
+                                                    </option>
+                                                    <option value="ONE BY ONE WIMPER EXTENSIONS - Opvullen 2 weken">Opvullen
+                                                        2
+                                                        weken
+                                                    </option>
+                                                    <option value="ONE BY ONE WIMPER EXTENSIONS - Opvullen 3 weken">Opvullen
+                                                        3
+                                                        weken
+                                                    </option>
+                                                    <option value="ONE BY ONE WIMPER EXTENSIONS - Opvullen 4 weken">Opvullen
+                                                        4
+                                                        weken
+                                                    </option>
+                                                    <optgroup label="VOLUME WIMPER EXTENSIONS"></optgroup>
+                                                    <option value="VOLUME WIMPER EXTENSIONS - Opvullen 2 weken">Opvullen 2
+                                                        weken
+                                                    </option>
+                                                    <option value="VOLUME WIMPER EXTENSIONS - Opvullen 3 weken">Opvullen 3
+                                                        weken
+                                                    </option>
+                                                    <option value="VOLUME WIMPER EXTENSIONS - Opvullen 4 weken">Opvullen 4
+                                                        weken
+                                                    </option>
+                                                    <optgroup label="LASH LFITING"></optgroup>
+                                                    <option value="Lash lift">Lash lift</option>
+                                                    <option value="Lash lift + tint">Lash lift + tint</option>
+                                                    <optgroup label="BROW LAMINATION"></optgroup>
+                                                    <option value="Brow lamination">Brow lamination</option>
+                                                    <option value="Brow lamination + tint">Brow lamination + tint</option>
+                                                    <optgroup label="(OMBRÉ) POWDER BROWS"></optgroup>
+                                                    <option value="(OMBRÉ) POWDER BROWS incl. nabehandeling">(OMBRÉ) POWDER
+                                                        BROWS incl.
+                                                        nabehandeling</option>
+                                                    <option value="(OMBRÉ) POWDER BROWS - Touch up binnen 6 maanden">Touch
+                                                        up
+                                                        binnen 6
+                                                        maanden
+                                                    </option>
+                                                    <option value="(OMBRÉ) POWDER BROWS - Touch up binnen 1 jaar">Touch up
+                                                        binnen 1 jaar
+                                                    </option>
+                                                    <optgroup label="LIPBLUSH PMU"></optgroup>
+                                                    <option>PMU LIPBLUSH</option>
+                                                    <option value="PMU LIPBLUSH - Touch up binnen 6 maanden">Touch up binnen
+                                                        6
+                                                        maanden
+                                                    </option>
+                                                    <option value="PMU LIPBLUSH - Touch up binnen 1 jaar">Touch up binnen 1
+                                                        jaar
+                                                    </option>
+                                                    <optgroup label="VERWIJDEREN"></optgroup>
+                                                    <option value="Verwijderen wimper extensions">Verwijderen wimper
+                                                        extensions
+                                                    </option>
+                                                </select>
+
+                                                <!-- Explainer how long each appointment is going to take -->
+                                                <p v-if="selected !== 'Selecteer een behandeling...'">
+                                                    Deze behandeling duurt ongeveer <b>{{ durations.get(selected) }}
+                                                        minuten.</b>
+                                                </p>
+
+                                                <!-- Date and time -->
+                                                <h4>
+                                                    Datum & Tijd<span class="mandatory">*</span>
+                                                </h4>
+
+                                                <div class="full-width date-box-outline pb-0">
+                                                    <div v-if="selected !== 'Selecteer een behandeling...'">
+                                                        <div class="flex space pt-5 full-width">
+                                                            <img src="../../assets/svg/previous.svg"
+                                                                :class="chosenDate > 0 ? 'icon-increment left-icon' : 'icon-increment disappear-date left-icon'"
+                                                                @click="changeDate(-1);">
+                                                            <div class="current-date fixed-width-300">{{
+                                                                dateShow(dates[chosenDate].appointmentDate).dateString
+                                                            }}
+                                                            </div>
+                                                            <img src="../../assets/svg/next.svg"
+                                                                :class="chosenDate < dates.length - 1 ? 'icon-increment right-icon' : 'icon-increment disappear-date right-icon'"
+                                                                @click="changeDate(1);">
+                                                        </div>
+                                                        <div class="move-middle">
+                                                            <small>
+                                                                {{ dateShow(dates[chosenDate].appointmentDate).dateDay }}
+                                                            </small>
+                                                        </div>
+                                                        <div class="filler-1em"></div>
+                                                        <div class="date-box row my-2 my-md-4 mx-auto row-cols-2 row-cols-md-3"
+                                                            id="dateBox">
+                                                            <div v-for="(  slot, index  ) in dates[chosenDate].slots"
+                                                                class="col col-md-3 p-1" :key="slot">
+                                                                <div :class="[chosenTime === index ? 'date-available date-chosen' : 'date-available', availableSlots[index].available ? 'available' : 'unavailable']"
+                                                                    @click="function () {
+                                                                        if (availableSlots[index].available)
+                                                                            updateChosenTime(index)
+                                                                    }">
+                                                                    {{ slot.hour }} : {{ slot.minutes < 10 ? slot.minutes
+                                                                        + '0' : slot.minutes }} </div>
+                                                                        <div v-if="dates[chosenDate].slots.length === 0">
+                                                                            <p>Sorry. Voor deze dag zijn geen plekken
+                                                                                beschikbaar.
+                                                                            </p>
+                                                                        </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div v-else class="padding-box">
+                                                            <h4>Kies eerst een behandeling</h4>
+                                                            <p>De beschikbare tijden zijn afhankelijk van de behandeling die
+                                                                je
+                                                                kiest.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <h4>Opmerkingen</h4>
+                                                    <textarea class="textarea" :value="comments"
+                                                        @input="val => comments = val.target.value"
+                                                        name="comments"></textarea>
+                                                    <h4>Algemene voorwaarden<span class="mandatory">*</span></h4>
+                                                    <label>
+                                                        <input type="checkbox" name="acceptTerms"
+                                                            @click="val => acceptTerms = val.target.checked"
+                                                            :value="acceptTerms">
+                                                        <span>&nbsp;Ik ga akkoord met de <router-link
+                                                                to="/algemene-voorwaarden">Algemene
+                                                                Voorwaaden</router-link></span>
+                                                    </label>
+                                                    <div v-for="error in errors" :key="error">
+                                                        <p v-if="error.display" class="error">{{ error.message }}</p>
+                                                    </div>
+                                                    <div class="flex d-mobile-block mt-3">
+                                                        <button type="submit" class="site-button-square"
+                                                            :disabled="!formIsValid()">AFSPRAAK
+                                                            INPLANNEN</button>
+                                                    </div>
+                                                    <p>
+                                                        <small>*) Velden met een sterretje zijn verplicht</small>
+                                                    </p>
+
+                                                    <!-- Hidden values -->
+                                                    <input type="text" class="hidden-input" name="date_time"
+                                                        :value="appointmentTimeDate">
+                                                    <input type="text" class="hidden-input" name="duration_minutes"
+                                                        :value="durations.get(selected)">
+                                            </form>
+                                        </div>
                                     </div>
-                                    <img src="../../assets/svg/next.svg"
-                                        :class="chosenDate < dates.length - 1 ? 'icon-increment right-icon' : 'icon-increment disappear-date right-icon'"
-                                        @click="changeDate(1);">
-                                </div>
-                                <div class="filler-1em"></div>
-                                <div class="date-box" id="dateBox">
-                                    <div v-for="(  slot, index  ) in dates[chosenDate].slots" :key="slot"
-                                        :class="[chosenTime === index ? 'date-available date-chosen' : 'date-available']"
-                                        @click="chosenTime = index">
-                                        {{ slot.hour }} : {{ slot.minutes < 10 ? slot.minutes + '0' : slot.minutes }} </div>
-                                            <div v-if="dates[chosenDate].slots.length === 0">
-                                                <p>Sorry. Voor deze dag zijn geen plekken beschikbaar.</p>
-                                            </div>
-                                    </div>
-                                </div>
-                                <div v-else class="padding-box">
-                                    <h3>Kies eerst een behandeling</h3>
-                                    <p>De beschikbare tijden zijn afhankelijk van de behandeling die je kiest.</p>
                                 </div>
                             </div>
-                            <h3>Opmerkingen</h3>
-                            <textarea class="textarea" :value="comments"
-                                @input="val => comments = val.target.value"></textarea>
-                            <h3>Algemene voorwaarden<span class="mandatory">*</span></h3>
-                            <label>
-                                <input type="checkbox" name="acceptTerms" @click="val => acceptTerms = val.target.checked"
-                                    :value="acceptTerms">
-                                <span>Ik ga akkoord met de <router-link to="/algemene-voorwaarden">Algemene
-                                        Voorwaaden</router-link></span>
-                            </label>
-                            <div class="filler-1em"></div>
-                            <div v-for="error in errors" :key="error">
-                                <p v-if="error.display" class="error">{{ error.message }}</p>
-                            </div>
-                            <div class="flex d-mobile-block">
-                                <div class="site-button-square" @click="planAppointment()">AFSPRAAK INPLANNEN</div>
-                            </div>
-                            <p>
-                                <small>*) Velden met een sterretje zijn verplicht</small>
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="full-width marble hide-mobile" id="marble">
-                        <div class="container full-width hours-container transparent-background">
-                            <img src="../../assets/lashroom_logo_full.png" class="icon-smaller">
-                            <h2>Openingstijden</h2>
-                            <div class="flex">
-                                <ul>
-                                    <li>Maandag</li>
-                                    <li>Dinsdag</li>
-                                    <li>Woensdag</li>
-                                    <li>Donderdag</li>
-                                    <li>Vrijdag</li>
-                                    <li>Zaterdag</li>
-                                    <li>Zondag</li>
-                                </ul>
-
-                                <ul>
-                                    <li class="closed">Gesloten</li>
-                                    <li>11:30 - 19:00</li>
-                                    <li>10:00 - 17:00</li>
-                                    <li>10:00 - 17:00</li>
-                                    <li>10:00 - 17:00</li>
-                                    <li class="closed">Gesloten</li>
-                                    <li class="closed">Gesloten</li>
-                                </ul>
-                            </div>
-                        </div>
+                        </template>
+                        <template v-else>
+                            <p>We zijn nog even bezig met het inrichten van het afspraaksysteem. Binnenkort zul je hier
+                                gemakkelijk en
+                                overzichtelijk afspraken kunnen inplannen.</p>
+                            <p>Maak gemakkelijk een afspraak door een <a
+                                    href="https://www.instagram.com/lashroomdeventerr/">DM te
+                                    sturen op Instagram</a>.</p>
+                        </template>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </template>
 
 <script>
-import Breadcrumbs from '../shared/Breadcrumbs.vue';
-
 /* eslint-disable */
+import Breadcrumbs from '../shared/Breadcrumbs.vue';
+import axios from 'axios';
+
 const newDate = new Date();
 const MAX_DAYS_FUTURE = 14;
 
@@ -161,17 +232,21 @@ export default {
     components: {
         Breadcrumbs
     }, methods: {
-        getAppointments() {
-            let xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                const response = xhr.responseText;
-                console.log(response);
-
-                // const responseJson = JSON.parse(response);
-                // console.log(responseJson);
+        formIsValid() {
+            if (this.selected !== "Selecteer een behandeling..." && this.firstname !== "" && this.lastname !== "" && this.validateEmail(this.email) && this.chosenTime !== -1 && this.acceptTerms)
+                return true;
+            return false;
+        }, updateChosenTime(index) {
+            this.chosenTime = index;
+            this.calculateTimeOfAppointment();
+        }, getAppointments() {
+            if (this.$shouldFetch) {
+                fetch('https://lashroomdeventer.nl/php/appointment_scripts/get_appointments.php')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        this.allAppointments = data;
+                    });
             }
-            xhr.open("GET", "https://65311d8c4d4c2e3f333c66d8.mockapi.io/appointments");
-            xhr.send(null);
         }, getListOfDates() {
             let dates = [];
             let index = 0;
@@ -190,27 +265,27 @@ export default {
                     slots: slots
                 });
             }
+
+            // Check if first date is current date and if so, remove first element
+            let first = dates[0].appointmentDate;
+            let now = new Date();
+            if (first.getDate() === now.getDate() && first.getMonth() === now.getMonth() && first.getFullYear() === now.getFullYear())
+                dates.splice(0, 1);
+
             return dates;
-        }, updateParallax() {
-            const el = document.getElementById("marble");
-            if (!el)
-                return;
-
-            const rect = el.getBoundingClientRect();
-            const offset = rect.y / 10;
-
-            el.style.backgroundPosition = `50% ${50 + offset}%`;
         }, dateShow(date) {
             let dateString = "";
             let days = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
             let months = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
 
-            dateString += days[date.getDay()] + " - ";
             dateString += date.getDate() + " ";
             dateString += months[date.getMonth()] + " ";
             dateString += date.getFullYear();
 
-            return dateString;
+            return {
+                dateString: dateString,
+                dateDay: days[date.getDay()]
+            };
         }, changeDate(amount) {
             this.chosenDate += amount;
             this.chosenDate = Math.min(this.chosenDate, this.dates.length - 1);
@@ -221,6 +296,8 @@ export default {
             const dateBox = document.getElementById("dateBox");
             dateBox.style.animationName = "date-animation";
             dateBox.style.animationDuration = "1000ms";
+
+            this.calculateTimeSlotAvailability();
         }, getDaySlots(dayOfWeek) {
             // Use opening and closing hours to dynamically create hour slots
             const workingHours = this.getAvailableTimeSlots(dayOfWeek);
@@ -234,12 +311,19 @@ export default {
                     hour: currentHour,
                     minutes: minutes
                 });
-                minutes += 15;
-                if (minutes > 45) {
+                minutes += 30;
+                if (minutes > 30) {
                     minutes = 0;
                     currentHour++;
                 }
             }
+
+            if (workingHours.startingHour === 11)
+                slots.splice(0, 1);
+
+            // Remove final element if interval is shorter than 30 minutes
+            if (this.INTERVAL < 30)
+                slots.pop();
             return slots;
         }, getAvailableTimeSlots(dayOfWeek) {
             if (dayOfWeek === 2) {
@@ -302,21 +386,6 @@ export default {
                     this.$cookies.set("appPhone", this.phone, COOKIE_LIFETIME);
                     this.$cookies.set("appComments", this.comments, COOKIE_LIFETIME);
 
-                    const appointmentDate = `${this.dateShow(this.dates[this.chosenDate].appointmentDate)} om ${this.dates[this.chosenDate].slots[this.chosenTime]}`;
-
-                    console.log(this.dates[this.chosenDate].appointmentDate);
-                    console.log(this.dates[this.chosenDate].slots[this.chosenTime]);
-
-                    // Create a UNIX timestamp based on date
-                    const appDate = this.dates[this.chosenDate].appointmentDate;
-                    const appTime = this.dates[this.chosenDate].slots[this.chosenTime];
-                    const SECONDS = 0;
-                    const newDate = new Date(appDate.getFullYear(), appDate.getMonth(), appDate.getDate(), appTime.hour, appTime.minutes, SECONDS);
-
-                    console.log(newDate);
-
-                    const dateUnix = Math.floor(newDate.getTime() / 1000);
-
                     this.$cookies.set("appDate", dateUnix, COOKIE_LIFETIME);
                 }
 
@@ -324,34 +393,95 @@ export default {
                     this.$router.push("/bedankt");
                 this.planning = false;
             }, 3000);
+        }, calculateTimeOfAppointment() {
+            try {
+                const appDate = this.dates[this.chosenDate].appointmentDate;
+                const appTime = this.dates[this.chosenDate].slots[this.chosenTime];
+                const SECONDS = 0;
+                const newDate = new Date(appDate.getFullYear(), appDate.getMonth(), appDate.getDate(), appTime.hour, appTime.minutes, SECONDS);
+
+                // Calculate new time and return it
+                this.appointmentTimeDate = Math.floor(newDate.getTime() / 1000);
+            } catch (err) {
+                this.appointmentTimeDate = 0;
+            }
         }, validateEmail(email) {
             const REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
             return email.match(REGEX);
         }, getDurations() {
-            this.durations.set("NIEUWE SET", 300);
-            this.durations.set("Opvullen 2 weken", 30);
-            this.durations.set("Opvullen 3 weken", 30);
-            this.durations.set("Opvullen 4 weken", 30);
+            this.durations.set("ONE BY ONE WIMPER EXTENSIONS - Nieuwe set", 60);
+            this.durations.set("ONE BY ONE WIMPER EXTENSIONS - Opvullen 2 weken", 30);
+            this.durations.set("ONE BY ONE WIMPER EXTENSIONS - Opvullen 3 weken", 30);
+            this.durations.set("ONE BY ONE WIMPER EXTENSIONS - Opvullen 4 weken", 30);
+            this.durations.set("VOLUME WIMPER EXTENSIONS - Opvullen 2 weken", 30);
+            this.durations.set("VOLUME WIMPER EXTENSIONS - Opvullen 3 weken", 30);
+            this.durations.set("VOLUME WIMPER EXTENSIONS - Opvullen 4 weken", 30);
             this.durations.set("Lash lift", 30);
             this.durations.set("Lash lift + tint", 45);
             this.durations.set("Brow lamination", 30);
             this.durations.set("Brow lamination + tint", 45);
             this.durations.set("(OMBRÉ) POWDER BROWS incl. nabehandeling", 60);
-            this.durations.set("Touch up binnen 6 maanden", 30);
-            this.durations.set("Touch up binnen 1 jaar", 30);
+            this.durations.set("(OMBRÉ) POWDER BROWS - Touch up binnen 6 maanden", 30);
+            this.durations.set("(OMBRÉ) POWDER BROWS - Touch up binnen 1 jaar", 30);
             this.durations.set("PMU LIPBLUSH", 60);
+            this.durations.set("PMU LIPBLUSH - Touch up binnen 6 maanden", 30);
+            this.durations.set("PMU LIPBLUSH - Touch up binnen 1 jaar", 30);
             this.durations.set("Verwijderen wimper extensions", 30);
-        },
+        }, calculateTimeSlotAvailability() {
+            this.availableSlots = [];
+            let curDate = this.dates[this.chosenDate];
+            this.chosenTime = -1;
+
+            let date = curDate.appointmentDate;
+            let slots = curDate.slots;
+
+            for (let i = 0; i < slots.length; i++) {
+                const avSlot = Math.floor(new Date(date.getFullYear(), date.getMonth(), date.getDate(), slots[i].hour, slots[i].minutes).getTime() / 1000);
+                this.availableSlots.push({
+                    slot: avSlot,
+                    available: true
+                });
+            }
+
+            const closingHour = this.availableSlots[this.availableSlots.length - 1];
+
+            for (let i = 0; i < this.availableSlots.length; i++) {
+                let slot = this.availableSlots[i];
+
+                // Check whether appointment overlaps with other appointments
+                // If it does, disable the time slot
+                for (let j = 0; j < this.allAppointments.length; j++) {
+                    const chosenDuration = this.durations.get(this.selected) * 60;
+
+                    const app = this.allAppointments[j];
+                    const startAppointment = parseInt(app.date_time);
+                    const duration = parseInt(app.duration_minutes) * 60;
+                    const endAppointment = parseInt(startAppointment) + duration;
+
+                    if ((slot.slot >= startAppointment - chosenDuration && slot.slot < endAppointment)) {
+                        this.availableSlots[i].available = false;
+                    }
+                }
+
+                const overtime = Math.max(Math.floor(this.durations.get(this.selected) / 30) - 1, 0);
+
+                // Also check whether chosen time does not overlap
+                for (let k = 0; k < overtime; k++) {
+                    this.availableSlots[this.availableSlots.length - k - 1].available = false;
+                }
+            }
+        }
     },
     created() {
-        document.addEventListener("scroll", this.updateParallax);
         this.getAppointments();
         this.getDurations();
+        this.calculateTimeSlotAvailability();
         // Set title in tab-bar in top of browser
         document.title = "Lash Room Deventer | Afspraak maken";
         this.planning = false;
     }, data() {
         return {
+            canMakeAppointment: true,
             firstname: "",
             lastname: "",
             email: "",
@@ -363,16 +493,12 @@ export default {
             chosenTime: -1,
             planning: false,
             selected: "Selecteer een behandeling...",
-            available_times: [
-                "10:00",
-                "11:00",
-                "12:00",
-                "14:00",
-                "15:00",
-                "16:00",
-                "17:00"
-            ], durations: new Map(),
+            allAppointments: [],
+            appointmentTimeDate: 0,
+            INTERVAL: 30,
+            durations: new Map(),
             dates: this.getListOfDates(),
+            availableSlots: [],
             breadcrumbs: [
                 {
                     title: "Home",
@@ -413,6 +539,10 @@ export default {
     justify-content: center;
 }
 
+h4 {
+    margin-top: 1em;
+}
+
 .error {
     font-weight: bold;
     color: var(--color-unavailable);
@@ -430,11 +560,16 @@ export default {
 .input {
     border: 0;
     border-bottom: 1px solid var(--color-tint1);
-    width: 100%;
+    width: 60%;
     font-family: var(--content-font);
-    font-size: 16pt;
+    font-size: 14pt;
     box-sizing: border-box;
     padding-left: 0;
+}
+
+select {
+    width: 100%;
+    max-width: 640px;
 }
 
 input:focus {
@@ -453,9 +588,9 @@ input:focus {
     display: none;
 }
 
-.container-appointment {
+.cst-container-appointment {
     width: 100%;
-    max-width: 760px;
+
     background-color: #fff;
     text-align: left;
 }
@@ -464,8 +599,7 @@ input:focus {
     justify-content: space-around !important;
 }
 
-.container {
-    padding: 4em;
+.cst-container {
     box-sizing: border-box;
     text-align: left;
     background-color: var(--color-tint4);
@@ -473,20 +607,28 @@ input:focus {
     width: 100%;
 }
 
-.container-gray {
+.cst-container-gray {
     background-color: var(--color-tint3);
 }
 
-.container-dark-gray {
+.cst-container-dark-gray {
     background-color: var(--color-dark-tint1);
     color: var(--color-tint5);
+}
+
+.hidden-input {
+    visibility: hidden;
+}
+
+input {
+    font-size: 16px !important;
 }
 
 .textarea {
     transition-duration: var(--transition-200ms);
     width: 100%;
     resize: none;
-    height: 100px;
+    height: 200px;
     border: 1px solid var(--color-tint3);
     font-family: var(--content-font);
     font-size: 12pt;
@@ -499,18 +641,14 @@ input:focus {
 
 .date-box {
     transition-duration: var(--transition-500ms);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2em;
-    justify-content: center;
     overflow: hidden;
     animation-name: fade-in;
     animation-duration: var(--transition-400ms);
+    max-width: 1280px;
+    padding: 1em;
 }
 
 .date-box-outline {
-    padding-top: 2em;
-    padding-bottom: 2em;
     border: 1px solid var(--color-tint2);
     background-image: url("../../assets/stripes_light.png");
 }
@@ -521,9 +659,19 @@ input:focus {
     box-sizing: border-box;
     background-color: var(--color-dark-tint2);
     color: white;
-    width: 210px;
     text-align: center;
-    border: 1px solid transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fade-in var(--transition-1000ms) ease forwards;
+}
+
+@keyframes fade-in {
+    from {
+        filter: opacity(0);
+    }
+
+    to {
+        filter: opacity(100%);
+    }
 }
 
 .date-unavailable {
@@ -547,6 +695,15 @@ input:focus {
     color: var(--color-dark-tint2);
 }
 
+.lash-logo {
+    position: absolute;
+    right: 1%;
+    top: 1%;
+    width: 15vw;
+    border-radius: 50%;
+    box-shadow: 3px 4px 18px rgba(0, 0, 0, 0.1);
+}
+
 .date-chosen:hover {
     background-color: #fff;
     border: 1px solid var(--color-tint3);
@@ -557,6 +714,19 @@ input:focus {
     position: relative;
     right: 0;
     float: right;
+}
+
+.unavailable {
+    opacity: 35%;
+    background-color: var(--color-dark-tint2) !important;
+    color: #fff !important;
+    border-color: var(--color-dark-tint2) !important;
+    cursor: not-allowed !important;
+    transform: 0 !important;
+}
+
+.unavailable:hover {
+    opacity: 33% !important;
 }
 
 .hidden {
@@ -587,6 +757,16 @@ input:focus {
     width: 440px;
 }
 
+small {
+    text-align: center;
+}
+
+.move-middle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1em;
+}
+
 .left-icon:active {
     transform: translateX(-8px);
 }
@@ -604,7 +784,7 @@ label:hover {
 }
 
 select {
-    width: 100%;
+    width: 60%;
     padding: 0.5em;
     border: 1px solid var(--color-tint3);
     border-bottom: 1px solid var(--color-tint1);
@@ -637,17 +817,17 @@ select optgroup {
     }
 }
 
-@keyframes fade-in {
-    0% {
-        opacity: 0;
+@media only screen and (max-width: 868px) {
+    select {
+        width: 100%;
     }
 
-    100% {
-        opacity: 1;
+    .input {
+        width: 100%;
     }
 }
 
-.hours-container {
+.hours-cst-container {
     top: 4em;
     position: sticky;
     height: 400px;
@@ -683,5 +863,4 @@ li {
 
 .transparent-background {
     background-color: transparent;
-}
-</style>
+}</style>

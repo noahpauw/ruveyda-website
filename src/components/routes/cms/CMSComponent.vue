@@ -4,14 +4,14 @@
         <p>Welkom op het CMS, het Content Management Systeem. Op deze pagina's kun je de inhoud van de website aanpassen.
         </p>
         <div class="flex full-width center gap">
-            <div :class="currentCMS === 0 ? 'site-button site-button-perma-active' : 'site-button'"
-                @click="changeCurrentCMS(0)">Tekstinhoud</div>
-            <div :class="currentCMS === 1 ? 'site-button site-button-perma-active' : 'site-button'"
-                @click="changeCurrentCMS(1)">Afbeeldingen</div>
-            <div :class="currentCMS === 2 ? 'site-button site-button-perma-active' : 'site-button'"
-                @click="changeCurrentCMS(2)">Afspraken & Planning</div>
-            <div :class="currentCMS === 3 ? 'site-button site-button-perma-active' : 'site-button'"
-                @click="changeCurrentCMS(3)">Openingstijden</div>
+            <div :class="currentCMS === 0 ? 'site-button-square site-button-perma-active' : 'site-button-square'"
+                @click="changeCurrentCMS(0)"><i class="fa fa-pencil"></i> Tekstinhoud</div>
+            <div :class="currentCMS === 1 ? 'site-button-square site-button-perma-active' : 'site-button-square'"
+                @click="changeCurrentCMS(1)"><i class="fa fa-image"></i> Afbeeldingen</div>
+            <div :class="currentCMS === 2 ? 'site-button-square site-button-perma-active' : 'site-button-square'"
+                @click="changeCurrentCMS(2)"><i class="fa fa-address-book"></i> Afspraken & Planning</div>
+            <div :class="currentCMS === 3 ? 'site-button-square site-button-perma-active' : 'site-button-square'"
+                @click="changeCurrentCMS(3)"><i class="fa fa-hourglass"></i> Openingstijden</div>
         </div>
         <div class="filler"></div>
         <hr>
@@ -20,12 +20,15 @@
             <p>Verander hier gemakkelijk de tekstinhoud op de website. Deze veranderingen zul je direct kunnen zien nadat je
                 het
                 opslaat..</p>
-            <div v-for="c of content" :key="c">
-                <h3>{{ c }}</h3>
-                <textarea class="textarea" :value="getContent(c)"
-                    @input="val => updateContent(c, val.target.value)"></textarea>
-                <button class="site-button-square" :disabled="!usages.includes(c)" @click="saveContent(c)">Opslaan</button>
-                <div class="filler"></div>
+            <div v-for="content of textContent" :key="content.nameInDB">
+                <form action="https://www.lashroomdeventer.nl/php/webcontent/save_webcontent.php" method="POST">
+                    <h3>{{ content.heading }}</h3>
+                    <textarea class="textarea" :value="content.defaultContent" name="webcontent"
+                        @input="val => content.defaultContent = val.target.value"></textarea>
+                    <button class="site-button-square">Opslaan</button>
+                    <input style="visibility: hidden" name="id" :value="content.id">
+                    <div class="filler"></div>
+                </form>
             </div>
         </div>
 
@@ -39,6 +42,58 @@
             <p>Pas hier de beschikbare tijden en datums aan waarop mensen afspraken kunnen maken. Pas hier gelijk ook aan
                 hoe
                 lang iedere behandeling ongeveer duurt.</p>
+
+            <h3>Ingeplande afspraken ({{ this.allAppointments.length }})</h3>
+            <p>Hier staan alle afspraken die door klanten zijn ingepland via de website.</p>
+
+            <div class="flex">
+                <label for="today">
+                    <h4>Alleen afspraken van vandaag</h4>
+                </label>
+                <input type="checkbox" id="today" name="today">
+            </div>
+
+            <div class="filler"></div>
+
+            <table class="flex-table">
+                <tr>
+                    <th>
+                        Datum
+                    </th>
+                    <th>
+                        Naam klant
+                    </th>
+                    <th>
+                        E-mailadres
+                    </th>
+                    <th>
+                        Telefoonnummer
+                    </th>
+                    <th>
+                        Opmerkingen
+                    </th>
+                </tr>
+                <tr v-for="app in allAppointments" :key="app.id" class="editable" title="Bewerk deze afspraak">
+                    <td class="time-slot">
+                        {{ convertDate(app.date_time) }}
+                    </td>
+                    <td class="time-slot">
+                        {{ app.firstname }} {{ app.lastname }}
+                    </td>
+                    <td class="time-slot">
+                        {{ app.email }}
+                    </td>
+                    <td class="time-slot">
+                        {{ app.phonenumber }}
+                    </td>
+                    <td class="time-slot">
+                        {{ app.comments }}
+                    </td>
+                </tr>
+            </table>
+
+            <h3>Tijdsloten</h3>
+            <p>Hier kun je de beschikbare tijden per dag aanpassen.</p>
             <table>
                 <tr>
                     <th>Maandag</th>
@@ -78,19 +133,13 @@ export default {
     name: "cms-component",
     data() {
         return {
-            welcomeHeader: localStorage.getItem("welcomeHeader"),
-            welcomeMessage: localStorage.getItem("welcomeMessage"),
-            afspraakHeader: localStorage.getItem("afspraakHeader"),
-            afspraakContent: localStorage.getItem("afspraakContent"),
+            textContent: [
+                this.newTextContent(0, "over_mij", "Over mij", "", true)
+            ],
+            allAppointments: [],
             addTimeSlot: -1,
             newTimeSlot: "",
             currentCMS: 0,
-            content: [
-                "welcomeHeader",
-                "welcomeMessage",
-                "afspraakHeader",
-                "afspraakContent"
-            ],
             availableSlots: [
                 {
                     day: 0,
@@ -118,6 +167,15 @@ export default {
             usages: []
         }
     }, methods: {
+        getAppointments() {
+            if(this.$shouldFetch ) {
+                fetch('https://lashroomdeventer.nl/php/appointment_scripts/get_appointments.php')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        this.allAppointments = data;
+                    });
+            }
+        },
         updateContent(contentType, content) {
             switch (contentType) {
                 case "welcomeHeader":
@@ -135,6 +193,20 @@ export default {
             }
 
             this.updateUsage(contentType);
+        }, convertDate(dateUnix) {
+            let date = new Date(dateUnix * 1000);
+            let dateString = "";
+            let days = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
+            let months = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+
+            dateString += date.getDate() + " ";
+            dateString += months[date.getMonth()] + " ";
+            dateString += date.getFullYear();
+
+            let hour = date.getHours() > 9 ? date.getHours() : `0${date.getHours()}`;
+            let minutes = date.getMinutes() > 9 ? date.getMinutes() : `0${date.getMinutes()}`;
+
+            return `${days[date.getDay()]} - ${dateString} - ${hour}:${minutes}`;
         }, saveContent(contentType) {
             let content = "";
             switch (contentType) {
@@ -159,7 +231,7 @@ export default {
                     return this.welcomeHeader;
                 case "welcomeMessage":
                     return this.welcomeMessage;
-                case "afpsraakHeader":
+                case "afspraakHeader":
                     return this.afspraakHeader;
                 case "afspraakContent":
                     return this.afspraakContent;
@@ -167,7 +239,6 @@ export default {
         }, updateUsage(contentType) {
             if (!this.usages.includes(contentType)) {
                 this.usages.push(contentType);
-                console.log("It was added!");
                 return;
             }
         }, getTimeSlots(tuesday = false) {
@@ -203,9 +274,39 @@ export default {
             }
 
             this.availableSlots[slotIndex].slots = arr;
+        }, newTextContent(id, nameInDB, heading, defaultContent, showOnWebsite) {
+            return {
+                id: 1,
+                nameInDB: nameInDB,
+                heading: heading,
+                defaultContent: defaultContent,
+                showOnWebsite: showOnWebsite
+            }
+        }, getExistingTextContent() {
+            if(this.$shouldFetch ) {
+                fetch('https://lashroomdeventer.nl/php/webcontent/get_webcontent.php')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        for (let i = 0; i < data.length; i++) {
+                            let dat = data[i];
+                            for (let j = 0; j < this.textContent.length; j++) {
+                                if (dat.heading === this.textContent[j].nameInDB) {
+                                    this.textContent[j].defaultContent = dat.content;
+                                }
+                            }
+                        }
+                    });
+            }
         }
     }, created() {
         document.title = "Lash Room Deventer | CMS";
+        this.getAppointments();
+        this.getExistingTextContent();
+        // $('#summernote').summernote({
+        //     placeholder: 'Hello Bootstrap 4',
+        //     tabsize: 2,
+        //     height: 100
+        // });
     }
 }
 </script>
@@ -218,6 +319,20 @@ export default {
     background-color: var(--color-tint4);
     color: var(--color-dark-tint4);
     width: 100%;
+}
+
+.filler {
+    height: 1em;
+}
+
+.editable {
+    background-color: none;
+    transition: background-color var(--transition-200ms);
+    cursor: pointer;
+}
+
+.editable:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .gap {
@@ -236,7 +351,7 @@ export default {
     transition-duration: var(--transition-200ms);
     width: 100%;
     resize: none;
-    height: auto;
+    height: 200px;
     border: 1px solid var(--color-tint3);
     font-family: var(--content-font);
     font-size: 12pt;
@@ -258,6 +373,11 @@ table {
     border-collapse: collapse;
     border: 1px solid var(--color-tint1);
     table-layout: fixed;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.flex-table {
+    table-layout: auto;
 }
 
 table td,
@@ -301,6 +421,14 @@ td {
     text-align: center;
     font-size: 10pt;
     line-height: 20px;
+}
+
+.fa-pencil,
+.fa-image,
+.fa-address-book,
+.fa-hourglass {
+    box-shadow: 0;
+    filter: none;
 }
 
 .remove:hover {

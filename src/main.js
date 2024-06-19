@@ -20,6 +20,8 @@ const app = createApp({
     }
 })
 
+app.config.globalProperties.$shouldFetch = false;
+
 app.use(router);
 app.use(VueCookies);
 app.mount("#app");

@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeComponent from '../components/routes/HomeComponent.vue'
 import AboutMeComponent from '../components/routes/AboutMeComponent.vue'
 import AppointmentComponent from '../components/routes/AppointmentComponent.vue'
@@ -8,6 +8,7 @@ import ThanksComponent from '../components/routes/ThanksComponent.vue'
 import MyAppointmentComponent from '../components/routes/MyAppointmentComponent.vue'
 import CMSComponent from '../components/routes/cms/CMSComponent.vue'
 import TreatmentsComponent from '../components/routes/TreatmentsComponent.vue'
+import ContactComponent from '../components/routes/ContactComponent.vue'
 
 const routes = [
   {
@@ -29,7 +30,7 @@ const routes = [
   }, {
     path: '/contact',
     name: 'contact',
-    component: EmptyRouteComponent
+    component: ContactComponent
   }, {
     path: '/algemene-voorwaarden',
     name: 'algemene-voorwaarden',
@@ -54,7 +55,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHashHistory(),
   routes,
   scrollBehavior() {
     return {

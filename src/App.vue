@@ -3,9 +3,13 @@
     <BannerMain v-bind:scrollPosition="scrollPosition" v-on:updateScrollEvent="updateScrollEvent($event)"
       class="hide-mobile" />
     <div class="show-mobile mobile-navigation">
-      <img src="./assets/tiny_logo.png" width="180" class="logo-mobile">
-      <img src="./assets/svg/menu-alt-1-svgrepo-com.svg" width="32" class="menu-button" @click="toggleMenu()" v-if="!openedSidebar">
-      <img src="./assets/svg/close-svgrepo-com.svg" width="32" class="menu-button" @click="toggleMenu()" v-if="openedSidebar">
+      <router-link to="/" class="border-0">
+        <img src="./assets/tiny_logo.png" width="180" class="logo-mobile">
+      </router-link>
+      <img src="./assets/svg/menu-alt-1-svgrepo-com.svg" width="32" class="menu-button" @click="toggleMenu()"
+        v-if="!openedSidebar">
+      <img src="./assets/svg/close-svgrepo-com.svg" width="32" class="menu-button" @click="toggleMenu()"
+        v-if="openedSidebar">
     </div>
   </div>
   <!-- <nav>
@@ -17,13 +21,16 @@
 
   <Footer />
 
-  <div class="fab hide-mobile">
-    <img src="./assets/svg/insta.svg">
-  </div>
+  <a href="https://www.instagram.com/lashroomdeventerr/">
+    <div class="fab hide-mobile">
+      <i class="fa fa-instagram"></i>
+    </div>
+  </a>
 
-  <div class="fab fab-2 hide-mobile">
-    <img src="./assets/svg/cookie.svg" @click="resetCookiesConsent()">
-  </div>
+  <!-- 
+  <div class="fab fab-2 hide-mobile" @click="resetCookiesConsent()">
+    <i class="fa-solid fa-cookie-bite"></i>
+  </div> -->
 
   <div class="width-1920">
     <div class="cookies-consent">
@@ -82,6 +89,7 @@ export default {
   --transition-500ms: 500ms;
   --transition-600ms: 600ms;
   --transition-1000ms: 1000ms;
+  --transition-2000ms: 2000ms;
 
   /* Colors */
   --color-tint0: #A7A7A7;
@@ -106,7 +114,7 @@ export default {
 
   /* Fonts */
   --header-font: "Libre Bodoni", serif;
-  --content-font: "Montserrat", sans-serif;
+  --content-font: "Nunito", sans-serif;
 }
 
 ::placeholder {
@@ -124,6 +132,26 @@ export default {
   box-sizing: border-box;
 }
 
+.d-block {
+  display: block;
+}
+
+.d-inline-block {
+  display: inline-block;
+}
+
+a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-tint2);
+  color: var(--color-dark-tint1);
+  transition: color var(--transition-200ms) ease, border-color var(--transition-200ms) ease;
+}
+
+a:hover {
+  color: var(--color-unavailable);
+  border-color: var(--color-unavailable);
+}
+
 html,
 body {
   padding: 0;
@@ -134,16 +162,24 @@ body {
 
 h1 {
   font-family: var(--header-font);
-  font-size: 44pt;
   border-bottom: 1px solid var(--color-tint3);
+  font-weight: 100;
 }
 
 h2 {
   font-family: var(--header-font);
+  font-weight: 100;
 }
 
 p {
   text-align: left;
+  line-height: 2em;
+  letter-spacing: 0.4px;
+  font-weight: 100;
+}
+
+li {
+  letter-spacing: 0.28px;
 }
 
 .mobile-menu-container {
@@ -162,6 +198,18 @@ p {
 
 .second-level {
   padding-top: 300px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
+}
+
+.bg-diamonds {
+  background-image: url("@/assets/diamonds.png");
+}
+.bg-plus {
+  background-image: url("@/assets/plus.png");
+}
+
+.subtle-shadow {
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
 }
 
 .shine {
@@ -194,6 +242,8 @@ p {
 
 .full-width {
   width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .menu-button {
@@ -272,8 +322,9 @@ p {
 }
 
 .site-button-perma-active {
-  background-color: var(--color-tint5);
-  color: var(--color-dark-tint1);
+  background-color: var(--color-tint5) !important;
+  color: var(--color-dark-tint1) !important;
+  border: 2px solid var(--color-dark-tint2) !important;
 }
 
 .site-button:active {
@@ -288,6 +339,7 @@ p {
   padding: 1.5em;
   box-sizing: border-box;
   font-family: var(--content-font);
+  font-size: 16px;
 }
 
 .site-button-square:hover {
@@ -298,6 +350,11 @@ p {
 
 .site-button-square:active {
   background-color: #fff;
+}
+
+.site-button-square:disabled {
+  background-color: #eee !important;
+  color: #888 !important;
 }
 
 .no-top-margin {
@@ -312,6 +369,10 @@ p {
   padding: 4em;
 }
 
+.position-relative {
+  position: relative;
+  overflow: hidden;
+}
 
 a.router-link {
   color: white !important;
@@ -319,21 +380,27 @@ a.router-link {
 
 .fab {
   transition-duration: var(--transition-100ms);
-  background-color: var(--color-tint5);
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
   border-radius: 50%;
   width: 90px;
   height: 90px;
-  padding: 1em;
+  padding: 2px;
+  padding-left: 4px;
   position: fixed;
   bottom: 24px;
   right: 24px;
-  border: 1px solid var(--color-dark-tint2);
-  color: var(--color-dark-tint2);
+  border: 3px solid var(--color-dark-tint2);
+  color: var(--color-tint4);
   box-shadow: 2px 3px 11px rgba(0, 0, 0, 0.2);
+  z-index: 32;
+  font-size: 60px;
+  font-weight: 100;
 }
 
-.fab>img {
-  transform: translate3d(-1px, -1px, 0);
+.fab:hover {
+  background: radial-gradient(circle at 30% 107%, #fffac3 0%, #fffabe 5%, #ff8176 45%, #d45daf 60%, #5c7fe6 90%);
+  border-color: var(--color-tint4);
+  cursor: pointer;
 }
 
 .fab-2 {
@@ -346,40 +413,39 @@ a.router-link {
   width: 800px
 }
 
-.fab:hover {
-  cursor: pointer;
-  background-color: var(--color-dark-tint1);
-  color: var(--color-dark-)
-}
-
-.fab:active {
-  background-color: var(--color-tint5);
-  border-color: var(--color-tint5);
-}
-
-.fab>img {
-  -webkit-filter: none;
-  filter: none;
-  transition-duration: var(--transition-100ms);
-  width: 60px;
-  height: 60px;
-}
-
-.fab:hover>img {
-  -webkit-filter: invert();
-  filter: invert();
-}
-
-.fab:active>img {
-  -webkit-filter: none;
-  filter: none;
-}
-
 .overshadow {
   /* box-shadow: 0 0 40px rgba(0, 0, 0, 0.4); */
   z-index: 16;
   position: relative;
-  border-right: 8px solid var(--color-tint5);
+}
+
+.indent-s4 {
+  margin-left: 0;
+}
+
+.carousel-image {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity var(--transition-2000ms);
+
+  animation-name: move-image;
+  animation-duration: 5000ms;
+  animation-fill-mode:
+}
+
+.carousel-image-disappear {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity var(--transition-2000ms);
+  opacity: 0;
 }
 
 .container {
@@ -424,40 +490,13 @@ a.router-link {
   }
 
   .second-level {
-    padding-top: 60px !important;
+    padding-top: 48px !important;
   }
 
   p,
   span {
-    font-size: 14px;
     line-height: 24px;
     /* text-align: center; */
-  }
-
-  h1 {
-    font-size: 30pt !important;
-    border: 0;
-    font-weight: 100;
-    margin-bottom: 0;
-    /* text-align: center; */
-  }
-
-  h2 {
-    font-size: 20px !important;
-    /* text-align: center; */
-    font-weight: 100;
-    margin-top: 8px !important;
-    margin-bottom: 8px !important;
-  }
-
-  h3 {
-    font-size: 16px !important;
-    font-weight: 100 !important;
-  }
-
-  ul,
-  li {
-    font-size: 14px;
   }
 
   .d-mobile-block {
@@ -483,13 +522,10 @@ a.router-link {
     border: 0 !important;
   }
 
-  .input {
-    font-size: 14px !important;
-  }
-
   .site-button-square {
     width: 100% !important;
     text-align: center !important;
+
   }
 
   .w-mobile-100 {
@@ -500,12 +536,6 @@ a.router-link {
     display: block;
   }
 
-  tr,
-  th,
-  td {
-    font-size: 12px !important;
-  }
-
   table {
     width: 100%;
   }
@@ -514,33 +544,26 @@ a.router-link {
     padding: 0 !important;
   }
 
-  .date-available {
-    padding: 12px;
-    font-size: 12px;
-    width: 40% !important;
-  }
-
   .current-date {
-    font-size: 20px !important;
     width: auto !important;
     margin-top: 4px;
-  }
-
-  .date-box-outline {
-    padding-bottom: 1em !important;
   }
 
   .icon-increment {
     width: 24px !important;
   }
 
-  .date-box {
-    justify-content: space-around;
+  .indent-s4 {
+    margin-left: 0;
   }
 }
 
 .no-underline {
   text-decoration: none;
+}
+
+.mobile-banner {
+  height: 150px;
 }
 
 .back-button {
@@ -550,5 +573,57 @@ a.router-link {
 
 .force-left-align {
   text-align: left !important;
+}
+
+/* Scrollbar */
+/* width */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.25);
+  transition: background-color var(--transition-200ms);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+  animation: fade-in 700ms ease-in-out forwards;
+}
+h2, h3, h4 {
+  opacity: 0;
+  animation: fade-in 700ms ease-in-out forwards;
+  animation-delay: 200ms;
+}
+p, span, strong {
+  opacity: 0;
+  animation: fade-in 700ms ease-in-out forwards;
+  animation-delay: 400ms;
+}
+
+.border-subtle {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: 0;
+  }
+  
 }
 </style>
