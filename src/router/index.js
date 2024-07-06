@@ -1,14 +1,17 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeComponent from '../components/routes/HomeComponent.vue'
-import AboutMeComponent from '../components/routes/AboutMeComponent.vue'
-import AppointmentComponent from '../components/routes/AppointmentComponent.vue'
-import EmptyRouteComponent from '../components/routes/EmptyRouteComponent.vue'
-import TermsOfServiceComponent from '../components/routes/TermsOfServiceComponent.vue'
-import ThanksComponent from '../components/routes/ThanksComponent.vue'
-import MyAppointmentComponent from '../components/routes/MyAppointmentComponent.vue'
-import CMSComponent from '../components/routes/cms/CMSComponent.vue'
-import TreatmentsComponent from '../components/routes/TreatmentsComponent.vue'
-import ContactComponent from '../components/routes/ContactComponent.vue'
+import HomeComponent from '@/components/routes/HomeComponent.vue'
+import AboutMeComponent from '@/components/routes/AboutMeComponent.vue'
+import AppointmentComponent from '@/components/routes/AppointmentComponent.vue'
+import EmptyRouteComponent from '@/components/routes/EmptyRouteComponent.vue'
+import TermsOfServiceComponent from '@/components/routes/TermsOfServiceComponent.vue'
+import ThanksComponent from '@/components/routes/ThanksComponent.vue'
+import MyAppointmentComponent from '@/components/routes/MyAppointmentComponent.vue'
+import TreatmentsComponent from '@/components/routes/TreatmentsComponent.vue'
+import ContactComponent from '@/components/routes/ContactComponent.vue'
+import LoginComponent from '@/components/routes/LoginComponent.vue'
+import CMSHomeComponent from '@/components/routes/cms/CMSHome.vue'
+import CMSWebContent from '@/components/routes/cms/CMSWebContent.vue'
+import CMSTreatments from '@/components/routes/cms/CMSTreatments.vue'
 
 const routes = [
   {
@@ -44,14 +47,26 @@ const routes = [
     name: 'mijn-afspraak',
     component: MyAppointmentComponent
   }, {
-    path: '/cms',
-    name: 'cms',
-    component: CMSComponent
-  }, {
     path: '/behandelingen',
     name: 'behandelingen',
     component: TreatmentsComponent
-  }
+  }, {
+    path: '/login',
+    name: 'login',
+    component: LoginComponent
+  }, {
+    path: '/cms/home',
+    name: 'Admin Home',
+    component: CMSHomeComponent,
+  }, {
+    path: '/cms/website-inhoud',
+    name: 'Admin Website Inhoud',
+    component: CMSWebContent,
+  }, {
+    path: '/cms/behandelingen',
+    name: 'CMS - Behandelingen',
+    component: CMSTreatments,
+  },
 ]
 
 const router = createRouter({

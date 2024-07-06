@@ -1,6 +1,28 @@
 <template>
     <div>
-        <div class="cst-container bg-diamonds">
+        <div class="cst-container bg-diamonds position-relative">
+            <div class="confirm-appointment p-2 p-lg-5">
+                <img src="@/assets/sade.png" class="sade">
+                <span class="position-absolute display-1 fw-normal mt-0 ms-2" role="button" @click="unconfirmAppointment">×</span>
+                <div class="myx-auto">
+                    <h2 class="h1 display-1 text-center">Je afspraak</h2>
+                    <div class="justify-content-center">
+                        <div class="row row-cols-1 mt-5">
+                            <h4 class="col h5 fw-normal text-center display-6">
+                                {{ dateShow(dates[chosenDate].appointmentDate).dateString }}
+                                <br/>
+                                {{ dates[chosenDate]?.slots[chosenTime]?.hour < 10 ? "0" + dates[chosenDate]?.slots[chosenTime]?.hour : dates[chosenDate]?.slots[chosenTime]?.hour }}:{{ dates[chosenDate]?.slots[chosenTime]?.minutes < 10 ? "0" + dates[chosenDate]?.slots[chosenTime]?.minutes : dates[chosenDate]?.slots[chosenTime]?.minutes }}
+                            </h4>
+                            <p class="col fs-3 px-3 fw-normal text-center mt-4">
+                                {{ selected }}
+                            </p>
+                            <div class="col text-center mt-4 confirm-app">
+                                <div class="confirmation-button"><i class="fa fa-check"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="p-4 p-lg-5">
                 <div class="p-0 p-lg-5">
                     <div class="p-0 p-lg-5 py-3 py-lg-5">
@@ -8,7 +30,7 @@
 
                         <h1 class="no-top-margin display-1 border-0">Afspraak maken</h1>
                         <template v-if="canMakeAppointment">
-                            <div class="row">
+                            <div class="row position-relative">
                                 <div class="cst-container-appointment mx-auto mt-2 mt-md-5 p-3 p-lg-5 rounded-1 subtle-shadow border border-light">
                                     <div class="p-1 p-md-2 p-xl-5">
                                         <div class="form position-relative">
@@ -52,7 +74,10 @@
                                                 <select v-model="selected" @change="() => calculateTimeSlotAvailability()"
                                                     name="appointment_type" required>
                                                     <option>Selecteer een behandeling...</option>
-                                                    <optgroup label="ONE BY ONE WIMPER EXTENSTIONS"></optgroup>
+                                                    <option v-for="treatment in treatments" :key="treatment.id" :value="treatment.title">
+                                                        {{ treatment.title }}
+                                                    </option>
+                                                    <!-- <optgroup label="ONE BY ONE WIMPER EXTENSTIONS"></optgroup>
                                                     <option value="ONE BY ONE WIMPER EXTENSIONS - Nieuwe set">Nieuwe set
                                                     </option>
                                                     <option value="ONE BY ONE WIMPER EXTENSIONS - Opvullen 2 weken">Opvullen
@@ -107,7 +132,7 @@
                                                     <optgroup label="VERWIJDEREN"></optgroup>
                                                     <option value="Verwijderen wimper extensions">Verwijderen wimper
                                                         extensions
-                                                    </option>
+                                                    </option> -->
                                                 </select>
 
                                                 <!-- Explainer how long each appointment is going to take -->
@@ -185,9 +210,11 @@
                                                         <p v-if="error.display" class="error">{{ error.message }}</p>
                                                     </div>
                                                     <div class="flex d-mobile-block mt-3">
-                                                        <button type="submit" class="site-button-square"
-                                                            :disabled="!formIsValid()">AFSPRAAK
-                                                            INPLANNEN</button>
+                                                        <div v-if="formIsValid()" class="site-button-square"
+                                                            @click="confirmAppointment">AFSPRAAK INPLANNEN</div>
+                                                        <div class="site-button-square opacity-50" v-else>
+                                                            AFSPRAAK INPLANNEN
+                                                    </div>
                                                     </div>
                                                     <p>
                                                         <small>*) Velden met een sterretje zijn verplicht</small>
@@ -408,25 +435,6 @@ export default {
         }, validateEmail(email) {
             const REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
             return email.match(REGEX);
-        }, getDurations() {
-            this.durations.set("ONE BY ONE WIMPER EXTENSIONS - Nieuwe set", 60);
-            this.durations.set("ONE BY ONE WIMPER EXTENSIONS - Opvullen 2 weken", 30);
-            this.durations.set("ONE BY ONE WIMPER EXTENSIONS - Opvullen 3 weken", 30);
-            this.durations.set("ONE BY ONE WIMPER EXTENSIONS - Opvullen 4 weken", 30);
-            this.durations.set("VOLUME WIMPER EXTENSIONS - Opvullen 2 weken", 30);
-            this.durations.set("VOLUME WIMPER EXTENSIONS - Opvullen 3 weken", 30);
-            this.durations.set("VOLUME WIMPER EXTENSIONS - Opvullen 4 weken", 30);
-            this.durations.set("Lash lift", 30);
-            this.durations.set("Lash lift + tint", 45);
-            this.durations.set("Brow lamination", 30);
-            this.durations.set("Brow lamination + tint", 45);
-            this.durations.set("(OMBRÉ) POWDER BROWS incl. nabehandeling", 60);
-            this.durations.set("(OMBRÉ) POWDER BROWS - Touch up binnen 6 maanden", 30);
-            this.durations.set("(OMBRÉ) POWDER BROWS - Touch up binnen 1 jaar", 30);
-            this.durations.set("PMU LIPBLUSH", 60);
-            this.durations.set("PMU LIPBLUSH - Touch up binnen 6 maanden", 30);
-            this.durations.set("PMU LIPBLUSH - Touch up binnen 1 jaar", 30);
-            this.durations.set("Verwijderen wimper extensions", 30);
         }, calculateTimeSlotAvailability() {
             this.availableSlots = [];
             let curDate = this.dates[this.chosenDate];
@@ -470,11 +478,70 @@ export default {
                     this.availableSlots[this.availableSlots.length - k - 1].available = false;
                 }
             }
+        }, confirmAppointment() {
+            $(".confirm-appointment").animate({
+                left: 0,
+            }, 600);
+        }, unconfirmAppointment() {
+            $(".confirm-appointment").animate({
+                left: "100vw",
+            }, 600);
         }
+    },
+    mounted() {
+        fetch("https://www.lashroomdeventer.nl/ruveyda-website/webcontent/treatments/get_treatments.php")
+            .then((response) => {
+                return response.json();
+            })
+            .then((res) => {
+                this.treatments = res;
+                this.treatments.forEach((t) => {
+                    this.durations.set(t.title, parseInt(t.duration_minutes));
+                });
+            })
+        $(".confirm-app").on('click', () => {
+            if($(".fa-check").length) {
+                $(".fa-check").removeClass('fa-check').addClass('fa-spinner fa-pulse');
+                setTimeout(() => {
+                    /*
+                    canMakeAppointment: true,
+            firstname: "",
+            lastname: "",
+            email: "",
+            phone: "",
+            date: new Date(),
+            comments: "",
+            acceptTerms: false,
+            chosenDate: 0,
+            chosenTime: -1,
+            planning: false,
+            selected: "Selecteer een behandeling...",
+            allAppointments: [],
+            appointmentTimeDate: 0,
+            INTERVAL: 30,
+            durations: new Map(),
+            dates: this.getListOfDates(),
+            availableSlots: [],
+            */
+                    this.calculateTimeOfAppointment();
+                    let paramString = `?name=${this.firstname} ${this.lastname}&email=${this.email}&phone=${this.phone}&treatment_id=${4}&date_time=${this.appointmentTimeDate}&comments=${this.comments}&agreed_to_terms=${this.acceptTerms}`;
+                    fetch('https://www.lashroomdeventer.nl/ruveyda-website/webcontent/appointments/add_appointment.php' + paramString)
+                        .then(() => {
+                            let time = (this.dates[this.chosenDate]?.slots[this.chosenTime]?.hour < 10 ? "0" + this.dates[this.chosenDate]?.slots[this.chosenTime]?.hour : this.dates[this.chosenDate]?.slots[this.chosenTime]?.hour) + ":" +
+                                (this.dates[this.chosenDate]?.slots[this.chosenTime]?.minutes < 10 ? "0" + this.dates[this.chosenDate]?.slots[this.chosenTime]?.minutes : this.dates[this.chosenDate]?.slots[this.chosenTime]?.minutes);
+                            localStorage.setItem("local_appointment", JSON.stringify({
+                                'name': this.firstname,
+                                'email': this.email,
+                                'date': (this.dateShow(this.dates[this.chosenDate].appointmentDate).dateString + " om " + time).toLowerCase(),
+                            }));
+                            this.$router.push('/bedankt');
+                        });
+                }, 1500);
+            }
+        });
     },
     created() {
         this.getAppointments();
-        this.getDurations();
         this.calculateTimeSlotAvailability();
         // Set title in tab-bar in top of browser
         document.title = "Lash Room Deventer | Afspraak maken";
@@ -499,6 +566,7 @@ export default {
             durations: new Map(),
             dates: this.getListOfDates(),
             availableSlots: [],
+            treatments: [],
             breadcrumbs: [
                 {
                     title: "Home",
@@ -532,6 +600,49 @@ export default {
 <style scoped>
 .filler-1em {
     height: 1em;
+}
+
+.myx-auto {
+    margin-top: calc(50vh - 300px);
+}
+
+.confirm-appointment {
+    position: fixed;
+    width: 100vw;
+    height: 100%;
+    left: 100vw;
+    top: 0;
+    background-color: rgba(24, 23, 25, 0.985);
+    color: #fff;
+    z-index: 9999999;
+}
+
+.confirmation-button {
+    width: 50%;
+    max-width: 200px;
+    max-height: 200px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    text-align: center;
+    border: 4px solid rgb(64, 255, 144);
+    font-size: 64px;
+    color: rgb(64, 255, 144);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.confirmation-button > i {
+    margin-top: calc(50% - 32px);
+    transition: transform 500ms;
+}
+
+.confirmation-button:hover > i {
+    transform: rotateZ(360deg);
+}
+
+.confirmation-button:hover {
+    transform: scale(1.05);
+    cursor: pointer;
 }
 
 .center {
@@ -582,6 +693,17 @@ input:focus {
     text-align: center;
     font-family: var(--header-font);
     font-size: 20pt;
+}
+
+.sade {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0.2;
+    object-fit: cover;
+    pointer-events: none;
 }
 
 .hide-time {

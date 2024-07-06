@@ -20,7 +20,29 @@ const app = createApp({
     }
 })
 
+app.config.globalProperties.$isAuthenticated = false;
+
 app.config.globalProperties.$shouldFetch = false;
+const protectedRoutes = ["/cms/home", "/cms/website-inhoud"];
+router.beforeEach(async (to) => {
+    if(protectedRoutes.indexOf(to.fullPath) >= 0) {
+        let user_id = localStorage.getItem("user_id");
+        if(!user_id) {
+            return '/login';
+        }
+            
+        await fetch(`https://www.lashroomdeventer.nl/ruveyda-website/webcontent/auth/is_authenticated.php?user_id=${user_id}`)
+            .then((response) => {
+                return response.json();
+            }).then((res) => {
+                if(!res.validate_login) {
+                    return '/login';
+                }                  
+            });
+
+        return true;
+    }
+});
 
 app.use(router);
 app.use(VueCookies);

@@ -62,6 +62,12 @@
                                 </p>
                                 <p class="col">info@lashroomdeventer.nl</p>
                             </div>
+                            <div class="row row-cols-2">
+                                <p class="col-5 col-xl-4 fw-bold">
+                                    Instagram
+                                </p>
+                                <p class="col"><a href="https://www.instagram.com/lashroomdeventerr/">@lashroomdeventerr</a></p>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -10,11 +10,13 @@
         </div>
 
         <template v-for="treatment in treatments" :key="treatment">
-            <div :class="['w-100 px-4 px-lg-5 text-start position-relative py-0 border-bottom border-subtle', treatment.text, treatment.background]">
+            <div :class="['w-100 px-4 px-lg-5 text-start position-relative py-0 treatment', treatment.background]">
                 <div class="p-0 p-lg-5">
-                    <div class="p-0 p-lg-5 py-3 py-lg-5">
-                        <h2 class="mt-3">{{ treatment.title }}</h2>
+                    <div class="p-0 p-lg-5 py-5">
+                        <h2 class="mt-lg-3">{{ treatment.title }}</h2>
+                        <hr/>
                         <div v-html="treatment.description"></div>
+                        <router-link to="/afspraak" class="btn btn-dark rounded-0 mt-3"><i class="fa fa-arrow-right"></i>&nbsp;INPLANNEN</router-link>
                     </div>
                 </div>
             </div>
@@ -36,32 +38,41 @@ export default {
                 title: "Behandelingen",
                 route: "/behandelingen"
             }],
-            treatments: [
-                {
-                    title: "One By One lashes",
-                    description: "<p>De One by One methode zorgt voor een elegante en natuurlijke look! Per natuurlijke wimperhaar wordt één enkele wimperextension geplaatst.</p><p>Deze behandelmethode is het meest geschikt voor mensen die veel wimpers van zichzelf hebben, maar meer lengte willen creëren of voor mensen die een natuurlijke en volle uitstraling willen.</p>",
-                    background: 'bg-dark',
-                    text: 'text-light',
-                },
-                {
-                    title: "Lashlift | Browlift",
-                    description: "<p>De One by One methode zorgt voor een elegante en natuurlijke look! Per natuurlijke wimperhaar wordt één enkele wimperextension geplaatst.</p><p>Deze behandelmethode is het meest geschikt voor mensen die veel wimpers van zichzelf hebben, maar meer lengte willen creëren of voor mensen die een natuurlijke en volle uitstraling willen.</p>",
-                    background: 'bg-light',
-                    text: 'text-dark',
-                }
-            ]
+            treatments: [],
         }
     }, components: {
         Breadcrumbs
+    },
+    methods: {
+        getTreatments() {
+            fetch("https://www.lashroomdeventer.nl/ruveyda-website/webcontent/treatments/get_treatments.php")
+            .then((response) => response.json())
+            .then((data) => {
+                this.treatments = data;
+                for(let i = 0; i < this.treatments.length; i++) {
+                    this.treatments[i].collapsed = true;
+                }
+            });
+        },
+    },
+    mounted() {
+        this.getTreatments();
     }
 }
 </script>
 
 <style scoped>
 h1 {
-    font-size: 42pt;
     text-align: left;
     margin-top: 0;
+}
+
+.bg-dark, .bg-diamonds-dark {
+    color: #fff !important;
+}
+
+.treatment {
+    border-top: 1px solid #00000011;
 }
 
 .cst-container {

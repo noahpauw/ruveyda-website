@@ -1,16 +1,25 @@
 <template>
-    <div class="container marble mobile-padding">
-        <router-link to="/">
-            <p class="show-mobile back-button">Terug</p>
-        </router-link>
-        <h1 v-if="name">Bedankt, {{ name }}!</h1>
-        <h1 v-else>Bedankt!</h1>
-        <p>Je afspraak is succesvol bij ons aangemaakt! <span v-if="email">We hebben een bevestigingsmailtje naar {{ email
-        }} verstuurd.</span></p>
-        <p>Ik zie je graag {{ date ? `op ${date} ` : "binnenkort" }} bij Lash Room Deventer! 😊</p>
-        <p>Klik <router-link to="/">hier</router-link> om terug te gaan naar de homepagina.</p>
-        <div class="full-width flex">
-            <img src="../../assets/lashroom_logo_full.png" class="logo-round mx-auto">
+    <div class="cst-container marble mobile-padding">
+        <div class="w-100 p-4 p-lg-5">
+            <div class="p-0 p-lg-5">
+                <div class="p-0 p-lg-5 py-3 py-lg-5 max-width-500">
+                    <router-link to="/">
+                        <p class="show-mobile back-button">Terug</p>
+                    </router-link>
+                    <h1 v-if="name" class="mb-5 display-1">Bedankt, {{ name }}!</h1>
+                    <h1 v-else>Bedankt!</h1>
+                    <div class="mx-auto">
+                        <p>Je afspraak is succesvol bij ons aangemaakt! <span v-if="email">We hebben een bevestigingsmailtje
+                                naar {{ email
+                                }} verstuurd.</span></p>
+                        <p>Ik zie je graag {{ date ? `op ${date} ` : "binnenkort" }}bij Lash Room Deventer! 😊</p>
+                        <p>Klik <router-link to="/">hier</router-link> om terug te gaan naar de homepagina.</p>
+                        <div class="full-width flex mt-5">
+                            <img src="@/assets/lashroom_logo_full.png" class="logo-round mx-auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -25,11 +34,14 @@ export default {
             email: undefined
         }
     }, mounted() {
-        this.name = this.$cookies.get("appFirstname");
-        this.email = this.$cookies.get("appEmail");
-
-        const appDate = this.$cookies.get("appDate");
-        this.date = appDate ? this.convertDateToString(parseInt(appDate)) : "vandaag";
+        try {
+            let local_appointment = JSON.parse(localStorage.getItem("local_appointment"));
+            this.name = local_appointment.name;
+            this.email = local_appointment.email;
+            this.date = local_appointment.date;
+        } catch(e) {
+            console.log(e);
+        }
 
         document.title = "Lash Room Deventer | Afspraak gepland"
     }, methods: {
@@ -51,8 +63,10 @@ export default {
     width: 100%;
 }
 
-.mx-auto {
-    margin: auto;
+.max-width-500{
+    max-width:1000px;
+    margin-left: auto;
+    margin-right:auto;
 }
 
 .container-gray {

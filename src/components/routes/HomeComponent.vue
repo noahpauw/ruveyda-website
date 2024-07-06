@@ -9,24 +9,13 @@
                 <div class="p-0 p-lg-5">
                     <div class="p-0 p-lg-5 py-3 py-lg-5">
                         <Breadcrumbs :breadcrumbs="breadcrumbs" class="hide-mobile" />
-                        <h1 class="no-top-margin mb-3 display-1">Welkom</h1>
-                        <p>Welkom op de website van Lash Room Deventer! Mijn naam is Rüveyda en in 2022 ben ik met Lash Room
-                            Deventer begonnen om mensen te voorzien van prachtige wimpers.
-                        </p>
-                        <h2 class="mt-4 mt-lg-5">Direct een afspraak maken?</h2>
-                        <p>
-                        <nav>Dat kan <router-link to="/afspraak">hier</router-link>!&nbsp;Voor het inplannen van een
-                            afspraak
-                            gelden
-                            onze
-                            <router-link to="/algemene-voorwaarden">Algemene Voorwaarden</router-link>.
-                        </nav>
-                        </p>
+                        <div v-for="block in contentblocks" v-html="block.content" :key="block.id">
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="mt-4 me-5">
-                <img src="@/assets/vaugier.png" class="portrait d-none d-lg-block">
+                <img src="@/assets/lashroom_logo_full.png" class="portrait d-none d-lg-block">
             </div>
         </div>
     </div>
@@ -66,8 +55,8 @@
 
             <Carousel :imageList="salonList" />
 
-            <div class="cst-container cst-container-skew mobile-padding position-relative d-inline-block inverted-margin position-relative">
-                <img src="@/assets/lashroom_diamonds.png" class="position-absolute opacity-25 top-0">
+            <div class="cst-container cst-container-skew mobile-padding position-relative d-inline-block inverted-margin position-relative overflow-hidden">
+                <img src="@/assets/lashroom_diamonds.png" class="position-absolute opacity-25 top-0 pe-none">
                 <div class="p-0 p-lg-5">
                     <div class="p-0 p-lg-5 py-3 py-lg-3">
                         <div class="p-0 p-lg-5">
@@ -97,7 +86,7 @@
                     </div>
                 </div>
 
-                <img src="../../assets/lashroom_logo_full.png" class="portrait float-right hide-mobile">
+                <img src="@/assets/lashroom_logo_full.png" class="portrait float-right hide-mobile">
             </div>
         </div>
 
@@ -134,10 +123,31 @@ export default {
                     route: "/",
                 }
             ],
+            contentblocks: [],
         }
     },
     created() {
         document.title = "Lash Room Deventer | Home";
+    },
+    mounted() {
+        fetch('https://lashroomdeventer.nl/ruveyda-website/webcontent/get_webcontent.php?route=home')
+            .then((response) => response.json())
+            .then((data) => {
+                for(let i = 0; i < data.length; i++) {
+                    switch(data[i].contentType) {
+                        default:
+                            data[i].content = `<p>${data[i].content}</p>`;
+                            break;
+                        case 'title':
+                            data[i].content = `<h1 class='display-1'>${data[i].content}</h1>`;
+                            break;
+                        case 'header':
+                            data[i].content = `<h3>${data[i].content}</h3>`;
+                            break;
+                    }
+                }
+                this.contentblocks = data;
+            });
     }
 }
 </script>

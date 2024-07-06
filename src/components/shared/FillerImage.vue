@@ -5,7 +5,7 @@
                 <source src="../../assets/videos/vid_makeup3.mp4" class="hide-mobile">
             </video> -->
             <div class="hover-darker"></div>
-            <router-link to="/afspraak" class="link">
+            <router-link to="/afspraak" class="link border-0">
                 <span class="site-button center">
                         PLAN DIRECT EEN AFSPRAAK
                 </span>

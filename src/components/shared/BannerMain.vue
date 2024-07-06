@@ -15,9 +15,9 @@
 
         <div :class="'contact-bar show-contact-bar hide-mobile'">
             <small class="flex centered">
-                <div class="contact-info"><img src="../../assets/svg/phone.svg" class="svg"> 0612345678</div>
+                <div class="contact-info"><img src="../../assets/svg/phone.svg" class="svg mb-2"> {{ phonenumber }}</div>
                 <div class="contact-info-divider">|</div>
-                <div class="contact-info"><img src="../../assets/svg/mail.svg" class="svg"> info@lashroomdeventer.nl</div>
+                <div class="contact-info"><img src="../../assets/svg/mail.svg" class="svg mb-2"> {{ email }}</div>
             </small>
         </div>
 
@@ -72,7 +72,9 @@ export default {
                 }
             ],
             currentUrl: this.$router.currentRoute,
-            scrollPosition: window.scrollY
+            scrollPosition: window.scrollY,
+            phonenumber: undefined,
+            email: undefined,
         }
     },
     methods: {
@@ -88,8 +90,20 @@ export default {
             return Math.min(Math.max(val, min), max);
         }
     },
-    created() {
+    async created() {
         document.addEventListener("scroll", this.handleScroll);
+
+        await fetch('https://lashroomdeventer.nl/ruveyda-website/webcontent/get_site_data.php?dataType=phonenumber')
+            .then((response) => response.json())
+            .then((data) => {
+                this.phonenumber = data[0].content;
+            });
+
+        await fetch('https://lashroomdeventer.nl/ruveyda-website/webcontent/get_site_data.php?dataType=email_address')
+            .then((response) => response.json())
+            .then((data) => {
+                this.email = data[0].content;
+            });
     }
 }
 </script>

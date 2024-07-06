@@ -43,10 +43,11 @@ export default {
 <style scoped>
 .mobile-menu {
     position: relative;
-    width: 100%;
+    width: calc(100% - 2em);
     height: 100%;
-    background-color: var(--color-dark-tint2);
+    background-color: #171717;
     padding-top: 50px;
+    overflow: hidden;
 }
 
 .mobile-nav {

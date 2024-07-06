@@ -6,9 +6,8 @@
                 <div class="p-0 p-lg-5 py-3 py-lg-5">
                     <Breadcrumbs :breadcrumbs="breadcrumbs" />
                     <h1 class="no-top-margin display-1">Over mij</h1>
-                    <div id="overMij">Hier kun je een korte introductie over jezelf geven.</div>
-                    <h4 class="my-3">Met een kopje</h4>
-                    <div id="overMij">Met contentblocks kun je dan verschillende soorten content toevoegen. Zoals afbeeldingen, tekstjes en zelfs video's!</div>
+                    <div v-for="block in contentblocks" v-html="block.content" :key="block.id">
+                    </div>
                 </div>
             </div>
         </div>
@@ -17,7 +16,6 @@
 
 <script>
 import Breadcrumbs from '../shared/Breadcrumbs.vue';
-import $ from 'jquery';
 
 export default {
     name: 'about-me',
@@ -34,25 +32,31 @@ export default {
                     title: "Over mij",
                     route: "/aboutme"
                 }
-            ], aboutMeContent: ""
+            ],
+            contentblocks: [],
         }
     }, created() {
         document.title = "Lash Room Deventer | Over mij";
 
-        $("#overMij").html("Dit is de over mij pagina");
-        console.log($("#overMij"))
-
-        if (this.$shouldFetch) {
-            fetch('https://lashroomdeventer.nl/php/webcontent/get_webcontent.php')
-                .then((response) => response.json())
-                .then((data) => {
-                    for (let i = 0; i < data.length; i++) {
-                        let dat = data[i];
-                        if (dat.heading === "over_mij")
-                            document.getElementById("overMij").innerHTML = `<p>${dat.content}</p>`;
+        fetch('https://lashroomdeventer.nl/ruveyda-website/webcontent/get_webcontent.php?route=aboutme')
+            .then((response) => response.json())
+            .then((data) => {
+                for(let i = 0; i < data.length; i++) {
+                    switch(data[i].contentType) {
+                        default:
+                            data[i].content = `<p>${data[i].content}</p>`;
+                            break;
+                        case 'title':
+                            data[i].content = `<h1 class='display-1'>${data[i].content}</h1>`;
+                            break;
+                        case 'header':
+                            data[i].content = `<h3>${data[i].content}</h3>`;
+                            break;
                     }
-                });
-        }
+                }
+                this.contentblocks = data;
+            });
+        
     }
 }
 </script>

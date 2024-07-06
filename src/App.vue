@@ -176,10 +176,13 @@ p {
   line-height: 2em;
   letter-spacing: 0.4px;
   font-weight: 100;
+  white-space: pre-wrap;
+  line-height: 30px !important;
 }
 
 li {
   letter-spacing: 0.28px;
+  line-height: 130%;
 }
 
 .mobile-menu-container {
@@ -203,6 +206,9 @@ li {
 
 .bg-diamonds {
   background-image: url("@/assets/diamonds.png");
+}
+.bg-diamonds-dark {
+  background-image: url("@/assets/diamonds_dark.png");
 }
 .bg-plus {
   background-image: url("@/assets/plus.png");
@@ -293,8 +299,9 @@ li {
 .mobile-navigation {
   width: 100%;
   height: 50px;
-  background-color: var(--color-dark-tint2);
+  background-color: #171717;
   position: relative;
+  border-bottom: 1px solid #ffffff22;
 }
 
 .logo-mobile {
@@ -456,6 +463,17 @@ a.router-link {
 
 .marble {
   background-image: url("./assets/stringy_marble_albedo.png");
+}
+
+.bg-sade {
+  background-image: url("./assets/sade.png");
+  background-size: cover;
+  background-position: 50%;
+  color: #fff !important;
+}
+
+.bg-stripes {
+    background-image: url("@/assets/stripes_light.png");
 }
 
 @keyframes fade-content {
